@@ -45,7 +45,7 @@ const page = () => {
                     className="w-1/2 h-full object-cover object-left max-w-[600px] "
                 />
                 <div className="text-black p-4 flex  flex-col">
-                    <h1 className="text-xs text-black/50 mt-2">Made by Vaibhav Rajpoot 💖</h1>
+                    <h1 className="text-xs text-black/50 mb-2">Made by Vaibhav Rajpoot 💖</h1>
                     <h2 className="text-5xl font-black mb-3 w-md flex flex-wrap">Find Your Vibe, Explore Your City</h2>
                     <p className="text-xl max-w-md text-black/70 mt-2 mb-4">New in town? No worries! LocaVibe helps you uncover the best local spots—from cozy cafés to budget-friendly shopping and hidden gems around campus</p>
                     <button className="text-white rounded-lg w-fit text-lg py-2 cursor-pointer bg-black font-semibold duration-200 px-7">Find your Vibe.</button>
