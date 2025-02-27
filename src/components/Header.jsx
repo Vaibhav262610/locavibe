@@ -38,15 +38,21 @@ const page = () => {
                 />
                 <button className="bg-green-400 cursor-pointer text-black font-semibold px-6 py-3 rounded-br-full rounded-tr-full rounded-bl-xl rounded-tl-xl">Search</button>
             </div>
-            <div className="mt-16 w-full flex justify-center relative">
-                <img src="https://media-cdn.tripadvisor.com/media/photo-o/2e/d9/f1/88/caption.jpg?w=1200&h=-1" alt="Travel Inspiration" className="w-full max-w-6xl rounded-lg" />
-                <div className="absolute  right-0 text-black p-4 flex  flex-col">
-                    <h1 className="text-xs text-black/50 mt-7">Made by Vaibhav Rajpoot 💖</h1>
-                    <h2 className="text-5xl font-black   mb-3 w-md flex flex-wrap">Find Your Vibe, Explore Your City</h2>
-                    <p className="text-xl max-w-md text-black/70  mt-2  mb-4">New in town? No worries! LocaVibe helps you uncover the best local spots—from cozy cafés to budget-friendly shopping and hidden gems around campus</p>
-                    <button className=' text-white  rounded-lg w-fit text-lg py-2   cursor-pointer  bg-black font-semibold duration-200 px-7'>Find your Vibe.</button>
+            <div className="mt-16 w-full flex bg-[#33e0a1] py-8 rounded-lg justify-center">
+                <img
+                    src="https://media-cdn.tripadvisor.com/media/photo-o/2e/d9/f1/88/caption.jpg?w=1200&h=-1"
+                    alt="Travel Inspiration"
+                    className="w-1/2 h-full object-cover object-left max-w-[600px] "
+                />
+                <div className="text-black p-4 flex  flex-col">
+                    <h1 className="text-xs text-black/50 mt-2">Made by Vaibhav Rajpoot 💖</h1>
+                    <h2 className="text-5xl font-black mb-3 w-md flex flex-wrap">Find Your Vibe, Explore Your City</h2>
+                    <p className="text-xl max-w-md text-black/70 mt-2 mb-4">New in town? No worries! LocaVibe helps you uncover the best local spots—from cozy cafés to budget-friendly shopping and hidden gems around campus</p>
+                    <button className="text-white rounded-lg w-fit text-lg py-2 cursor-pointer bg-black font-semibold duration-200 px-7">Find your Vibe.</button>
                 </div>
             </div>
+
+
         </div>
     );
 };
