@@ -23,7 +23,7 @@ const page = () => {
                     <button
                         key={section.name}
                         onClick={() => setActiveSection(section)}
-                        className={`flex items-center space-x-2 text-lg font-semibold ${activeSection.name === section.name ? "text-black border-b-2" : "text-[#D0D0D0]"
+                        className={`flex items-center space-x-2 text-lg font-semibold ${activeSection.name === section.name ? "text-[#FFD9C4] border-b-2" : "text-[#D0D0D0]"
                             }`}
                     >
                         <span>{section.icon}</span>
