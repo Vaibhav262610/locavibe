@@ -11,6 +11,7 @@ const page = () => {
           <Navbar />
           <Header />
           <Sections />
+          <Header />
         </div>
       </div>
     </>
