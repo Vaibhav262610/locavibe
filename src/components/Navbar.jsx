@@ -7,25 +7,33 @@ import Cookies from "js-cookie";
 const Navbar = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
+    const [isReviewDropdownOpen, setIsReviewDropdownOpen] = useState(false);
+
+    const profileDropdownRef = useRef(null);
+    const reviewDropdownRef = useRef(null);
 
     useEffect(() => {
         const token = Cookies.get("authToken");
         setIsAuthenticated(!!token);
     }, []);
 
-    // Function to handle clicks outside dropdown
+    // Function to handle clicks outside dropdowns
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            if (
+                profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)
+            ) {
                 setIsDropdownOpen(false);
+            }
+            if (
+                reviewDropdownRef.current && !reviewDropdownRef.current.contains(event.target)
+            ) {
+                setIsReviewDropdownOpen(false);
             }
         };
 
-        // Add event listener
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
-            // Cleanup event listener when component unmounts
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
@@ -44,10 +52,35 @@ const Navbar = () => {
                 <div className="flex text-[#D0D0D0] text-lg gap-5 md:gap-8 lg:gap-10">
                     <h2 className="hover:opacity-70 duration-200 cursor-pointer">Discover</h2>
                     <h2 className="hover:opacity-70 duration-200 cursor-pointer">Trips</h2>
-                    <h2 className="hover:opacity-70 duration-200 cursor-pointer">Review</h2>
+
+                    {/* Review Dropdown */}
+                    <div className="relative" ref={reviewDropdownRef}>
+                        <h2
+                            className="hover:opacity-70 duration-200 cursor-pointer"
+                            onClick={() => setIsReviewDropdownOpen(!isReviewDropdownOpen)}
+                        >
+                            Review
+                        </h2>
+                        {isReviewDropdownOpen && (
+                            <div className="absolute left-0 mt-2 text-sm font-semibold  w-40 bg-white text-black rounded-lg shadow-lg z-50">
+                                <Link href="/write-review" className="block px-4 py-3 hover:bg-gray-200">
+                                    Write a Review
+                                </Link>
+                                <Link href="/post-photo" className="block px-4 py-3 hover:bg-gray-200">
+                                    Post a Photo
+                                </Link>
+                                <Link href="/add-place" className="block px-4 py-3 hover:bg-gray-200">
+                                    Add a Place
+                                </Link>
+                            </div>
+                        )}
+                    </div>
+
                     <h2 className="hover:opacity-70 duration-200 cursor-pointer">Forums</h2>
                 </div>
-                <div className="relative" ref={dropdownRef}>
+
+                {/* Profile Dropdown */}
+                <div className="relative" ref={profileDropdownRef}>
                     {isAuthenticated ? (
                         <div>
                             <Image
@@ -58,7 +91,6 @@ const Navbar = () => {
                                 className="cursor-pointer hover:opacity-60 duration-200 rounded-full"
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                             />
-                            {/* Dropdown Menu */}
                             {isDropdownOpen && (
                                 <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-50">
                                     <Link href="/profile" className="block px-4 py-3 hover:bg-gray-200">

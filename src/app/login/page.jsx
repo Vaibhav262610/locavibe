@@ -65,7 +65,7 @@ const Page = () => {
 
             {/* Login Form */}
             <div className="relative z-10 w-full max-w-md bg-white p-6 sm:p-8 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-semibold text-center mb-6 text-teal-500">Login to Eventara</h2>
+                <h2 className="text-2xl font-semibold text-center mb-6 text-teal-500">Login to Locavibe</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>

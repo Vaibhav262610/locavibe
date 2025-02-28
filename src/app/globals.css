@@ -8,3 +8,19 @@ body {
 .nav {
   font-family: 'Brigends Expanded', sans-serif;
 }
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  animation-duration: 0.4s;
+  background: #33e0a1;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  animation-duration: 0.4s;
+}

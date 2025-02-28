@@ -60,7 +60,7 @@ const Page = () => {
             </div> */}
 
             <div className="relative z-10 w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-semibold text-center mb-6 text-teal-500">Sign up to Eventara</h2>
+                <h2 className="text-2xl font-semibold text-center mb-6 text-teal-500">Sign up to Locavibe</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">Username</label>
