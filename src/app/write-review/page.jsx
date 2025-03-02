@@ -58,32 +58,40 @@ const ReviewUI = () => {
         if (!token) {
             console.error('Token not found!');
             return;
+        } else {
+            console.log(token);
+
         }
 
+
+        const reviewData = {
+            title: "Great Servasdasdasdice!",
+            content: "I really enjoyed the experience.",
+            rating: 5
+        };
+
         try {
-            const profileRes = await fetch("/api/users/profile", {
-                method: "GET",
+            const response = await fetch("/api/review/reviews", {
+                method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify(reviewData),
             });
 
-            if (!profileRes.ok) {
-                // Log the response if it's not OK
-                const errorResponse = await profileRes.json();
-                console.error("Error fetching profile data:", errorResponse.message || errorResponse.error);
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                console.error("Error submitting review:", errorResponse.message || errorResponse.error);
                 return;
             }
 
-            const profileData = await profileRes.json();
-            console.log("Profile Data:", profileData);
-            // Proceed with further operations
+            const data = await response.json();
+            console.log("Review submitted successfully:", data);
         } catch (error) {
             console.error("Error in handleSubmit:", error.message || error);
         }
     };
-
 
     return (
         <div className="flex flex-col mt-32 items-center p-8 min-h-screen">

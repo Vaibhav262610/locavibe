@@ -44,7 +44,7 @@ export async function POST(request) {
         };
 
         const newToken = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
-            expiresIn: '1m', // Token expires in 30 minutes
+            expiresIn: '30m', // Token expires in 30 minutes
         });
 
         const response = new NextResponse(
