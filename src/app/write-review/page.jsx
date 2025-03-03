@@ -1,6 +1,6 @@
 "use client";
 import withAuth from "@/lib/withAuth";
-import axios from "axios";
+// import axios from "axios";3wertwt
 import React, { useState } from "react";
 
 const allowedCategories = ["Business", "Couples", "Family", "Friends", "Solo", "My Arrival", "My Experience"];
@@ -60,12 +60,10 @@ const ReviewUI = () => {
             return;
         } else {
             console.log(token);
-
         }
 
-
         const reviewData = {
-            title: "Great Servasdasdasdice!",
+            title: "Great Service!",
             content: "I really enjoyed the experience.",
             rating: 5
         };
@@ -131,7 +129,7 @@ const ReviewUI = () => {
                     <div className="w-[60%] mt-40">
                         <h1 className="text-2xl font-bold text-[#FFD9C4] ">Your reviews.</h1>
                         <p className="text-md mt-8 text-gray-400">
-                            You have no reviews yet. After you write some reviews, they will appear here.
+                            You have no reviews yet.  After you write some reviews, they will appear here.
                         </p>
                     </div>
                 </>
