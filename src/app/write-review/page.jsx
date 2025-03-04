@@ -1,7 +1,9 @@
 "use client";
 import withAuth from "@/lib/withAuth";
 // import axios from "axios";3wertwt
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const allowedCategories = ["Business", "Couples", "Family", "Friends", "Solo", "My Arrival", "My Experience"];
 const groupOptions = ["Business", "Couples", "Family", "Friends", "Solo"];
@@ -15,6 +17,23 @@ const ReviewUI = () => {
     const [titleText, setTitleText] = useState("");
     const [rating, setRating] = useState(0);
     const [selectedOption, setSelectedOption] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [reviews, setReviews] = useState([]);
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const response = await fetch("/api/review/reviews");
+                if (!response.ok) throw new Error("Failed to fetch reviews");
+                const data = await response.json();
+                setReviews(data.reviews);
+            } catch (error) {
+                console.error("Error fetching reviews:", error);
+            }
+        };
+        fetchReviews();
+    }, []);
+
 
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -58,12 +77,12 @@ const ReviewUI = () => {
         setSelectedOption(e.target.value);  // Update state on option change
     };
     const handleSubmit = async () => {
+        setLoading(true);
         const token = localStorage.getItem('authToken');
         if (!token) {
-            console.error('Token not found!');
+            toast.error('Authentication token not found!');
+            setLoading(false);
             return;
-        } else {
-            console.log(token);
         }
 
         const reviewData = {
@@ -74,7 +93,6 @@ const ReviewUI = () => {
             who: selectedGroup,
             rating: rating
         };
-
         try {
             const response = await fetch("/api/review/reviews", {
                 method: "POST",
@@ -92,10 +110,24 @@ const ReviewUI = () => {
             }
 
             const data = await response.json();
+            toast.success("Review submitted successfully!");
             console.log("Review submitted successfully:", data);
         } catch (error) {
+            toast.error("Error submitting review. Please try again.");
             console.error("Error in handleSubmit:", error.message || error);
         }
+        finally {
+            setUserInput("")
+            setFilteredOptions([])
+            setSelectedCategory("")
+            setSelectedGroup(null)
+            setReviewText("")
+            setTitleText("")
+            setRating(0)
+            setSelectedOption("")
+            setLoading(false);
+        }
+
     };
 
     return (
@@ -114,30 +146,28 @@ const ReviewUI = () => {
                         <input
                             type="text"
                             value={userInput}
-                            onChange={handleInputChange}
+                            onChange={(e) => setUserInput(e.target.value)}
                             placeholder="What would you like to review?"
                             className="w-full px-8 outline-none py-3 border border-[#FFD9C4] rounded-xl text-gray-300"
                         />
-
-                        {filteredOptions.length > 0 && (
-                            <ul className="absolute w-full bg-white border border-gray-300 mt-1 rounded-lg shadow-md text-black">
-                                {filteredOptions.map((option) => (
-                                    <li
-                                        key={option}
-                                        onClick={() => handleSelectCategory(option)}
-                                        className="p-2 cursor-pointer hover:bg-gray-200"
-                                    >
-                                        {option}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
                     </div>
                     <div className="w-[60%] mt-40">
-                        <h1 className="text-2xl font-bold text-[#FFD9C4] ">Your reviews.</h1>
-                        <p className="text-md mt-8 text-gray-400">
-                            You have no reviews yet.  After you write some reviews, they will appear here.
-                        </p>
+                        <h1 className="text-2xl font-bold text-[#FFD9C4]">Your reviews.</h1>
+                        {reviews.length === 0 ? (
+                            <p className="text-md mt-8 text-gray-400">
+                                You have no reviews yet. After you write some reviews, they will appear here.
+                            </p>
+                        ) : (
+                            <div className="mt-8 space-y-4">
+                                {reviews.map((review) => (
+                                    <div key={review.id} className="p-4 border border-gray-300 rounded-lg text-gray-200">
+                                        <h3 className="text-xl font-semibold">{review.title}</h3>
+                                        <p className="text-sm text-gray-400">{review.category} - {review.when}</p>
+                                        <p className="mt-2">{review.content}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </>
             ) : (
@@ -231,13 +261,14 @@ const ReviewUI = () => {
                         </div>
 
                         {/* Submit Button */}
-                        <button onClick={handleSubmit} className="w-full mt-8 cursor-pointer bg-[#33e0a1] text-white py-3 rounded-lg font-semibold hover:bg-gray-800">
-                            Continue
+                        <button onClick={handleSubmit} className="w-full mt-8 cursor-pointer bg-[#33e0a1] text-white py-3 rounded-lg font-semibold hover:bg-gray-800" disabled={loading}>
+                            {loading ? "Processing..." : "Continue"}
                         </button>
                     </div>
                 </div>
             )
             }
+            <ToastContainer />
         </div >
     );
 };
