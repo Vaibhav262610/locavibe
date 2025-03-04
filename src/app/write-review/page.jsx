@@ -14,6 +14,7 @@ const ReviewUI = () => {
     const [reviewText, setReviewText] = useState("");
     const [titleText, setTitleText] = useState("");
     const [rating, setRating] = useState(0);
+    const [selectedOption, setSelectedOption] = useState("");
 
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -53,6 +54,9 @@ const ReviewUI = () => {
         setRating(index + 1);
     };
 
+    const handleSelectChange = (e) => {
+        setSelectedOption(e.target.value);  // Update state on option change
+    };
     const handleSubmit = async () => {
         const token = localStorage.getItem('authToken');
         if (!token) {
@@ -63,9 +67,12 @@ const ReviewUI = () => {
         }
 
         const reviewData = {
-            title: "Great Service!",
-            content: "I really enjoyed the experience.",
-            rating: 5
+            title: titleText,
+            content: reviewText,
+            category: selectedCategory,
+            when: selectedOption,
+            who: selectedGroup,
+            rating: rating
         };
 
         try {
@@ -161,7 +168,8 @@ const ReviewUI = () => {
 
                         {/* Date Selection */}
                         <label className="block mt-8 text-gray-300 font-medium">When did you go?</label>
-                        <select className="w-full mt-2 p-2 border text-white bg-[#121b22] border-gray-300 rounded-lg">
+                        <select value={selectedOption}
+                            onChange={handleSelectChange} className="w-full mt-2 p-2 border text-white bg-[#121b22] border-gray-300 rounded-lg">
                             <option>Select one</option>
                             <option>Last week</option>
                             <option>Last month</option>
@@ -228,8 +236,9 @@ const ReviewUI = () => {
                         </button>
                     </div>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 
