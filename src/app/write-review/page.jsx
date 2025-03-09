@@ -11,6 +11,7 @@ const groupOptions = ["Business", "Couples", "Family", "Friends", "Solo"];
 const ReviewUI = () => {
     const [userInput, setUserInput] = useState("");
     const [filteredOptions, setFilteredOptions] = useState([]);
+    const [review, setReview] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [reviewText, setReviewText] = useState("");
@@ -18,22 +19,31 @@ const ReviewUI = () => {
     const [rating, setRating] = useState(0);
     const [selectedOption, setSelectedOption] = useState("");
     const [loading, setLoading] = useState(false);
-    const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
-        const fetchReviews = async () => {
+        const fetchEvents = async () => {
             try {
-                const response = await fetch("/api/review/reviews");
-                if (!response.ok) throw new Error("Failed to fetch reviews");
-                const data = await response.json();
-                setReviews(data.reviews);
+                const response = await fetch("/api/review/get-reviews");
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log("Fetched Reviews:", data);  // Log the data
+                    setReview(data);
+                } else {
+                    console.error("Failed to fetch events:", response.status);
+                }
             } catch (error) {
-                console.error("Error fetching reviews:", error);
+                console.error("Error fetching events:", error);
+            } finally {
+                setLoading(false);  // Update: stop loading after fetch
             }
         };
-        fetchReviews();
+        fetchEvents();
     }, []);
+    const [searchQuery, setSearchQuery] = useState(""); // Define searchQuery state
 
+    const filteredEvents = review.filter((review) =>
+        review.name && review.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -116,18 +126,15 @@ const ReviewUI = () => {
             toast.error("Error submitting review. Please try again.");
             console.error("Error in handleSubmit:", error.message || error);
         }
-        finally {
-            setUserInput("")
-            setFilteredOptions([])
-            setSelectedCategory("")
-            setSelectedGroup(null)
-            setReviewText("")
-            setTitleText("")
-            setRating(0)
-            setSelectedOption("")
-            setLoading(false);
-        }
-
+        setUserInput("")
+        setFilteredOptions([])
+        setSelectedCategory("")
+        setSelectedGroup(null)
+        setReviewText("")
+        setTitleText("")
+        setRating(0)
+        setSelectedOption("")
+        setLoading(false);
     };
 
     return (
@@ -146,28 +153,49 @@ const ReviewUI = () => {
                         <input
                             type="text"
                             value={userInput}
-                            onChange={(e) => setUserInput(e.target.value)}
+                            onChange={handleInputChange}
                             placeholder="What would you like to review?"
                             className="w-full px-8 outline-none py-3 border border-[#FFD9C4] rounded-xl text-gray-300"
                         />
+
+                        {filteredOptions.length > 0 && (
+                            <ul className="absolute w-full bg-white border border-gray-300 mt-1 rounded-lg shadow-md text-black">
+                                {filteredOptions.map((option) => (
+                                    <li
+                                        key={option}
+                                        onClick={() => handleSelectCategory(option)}
+                                        className="p-2 cursor-pointer hover:bg-gray-200"
+                                    >
+                                        {option}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
-                    <div className="w-[60%] mt-40">
-                        <h1 className="text-2xl font-bold text-[#FFD9C4]">Your reviews.</h1>
-                        {reviews.length === 0 ? (
-                            <p className="text-md mt-8 text-gray-400">
-                                You have no reviews yet. After you write some reviews, they will appear here.
-                            </p>
-                        ) : (
-                            <div className="mt-8 space-y-4">
-                                {reviews.map((review) => (
-                                    <div key={review.id} className="p-4 border border-gray-300 rounded-lg text-gray-200">
-                                        <h3 className="text-xl font-semibold">{review.title}</h3>
-                                        <p className="text-sm text-gray-400">{review.category} - {review.when}</p>
-                                        <p className="mt-2">{review.content}</p>
+                    <div className="relative w-[70rem] mt-40">
+                        <h1 className="text-4xl font-black text-white">Your Reviews</h1>
+                        <input
+                            type="text"
+                            placeholder="Search your reviews..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full px-8 outline-none mt-12 py-3 border border-[#FFD9C4] rounded-xl text-gray-300"
+                        />
+                        {loading ? (
+                            <p className="text-gray-400">Loading reviews...</p>  // Show loading text
+                        ) : review.length > 0 ? (
+                            <div className="w-full flex flex-col flex-wrap justify-center gap-6 mt-12">
+                                {review.map((rev) => (
+                                    <div key={rev._id} className="bg-none shadow-lg rounded-lg p-6 max-w-[40rem] border border-white/10">
+                                        <h2 className="text-2xl font-thin text-blue-700">{rev.name}</h2>
+                                        <p className="text-gray-300">{rev.content}</p>
                                     </div>
                                 ))}
                             </div>
+                        ) : (
+                            <p className="text-gray-400">No reviews available.</p>
                         )}
+
                     </div>
                 </>
             ) : (

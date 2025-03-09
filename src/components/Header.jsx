@@ -8,7 +8,7 @@ const sections = [
     { name: "Hotels", icon: <FaHotel />, heading: "Find Hotels", placeholder: "Search for hotels..." },
     { name: "Things to Do", icon: <FaCamera />, heading: "Discover Activities", placeholder: "Find attractions, tours..." },
     { name: "Restaurants", icon: <FaUtensils />, heading: "Explore Restaurants", placeholder: "Search for restaurants..." },
-    { name: "Flights", icon: <FaPlane />, heading: "Book Flights", placeholder: "Search for flights..." },
+    { name: "Shopping", icon: <FaPlane />, heading: "Find the best clothes", placeholder: "Search for flights..." },
     { name: "Holiday Homes", icon: <FaHome />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes..." },
 ];
 
@@ -51,8 +51,6 @@ const page = () => {
                     <button className="text-white rounded-lg w-fit text-lg py-2 cursor-pointer bg-black font-semibold duration-200 px-7">Find your Vibe.</button>
                 </div>
             </div>
-
-
         </div>
     );
 };
