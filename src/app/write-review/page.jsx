@@ -11,7 +11,7 @@ const groupOptions = ["Business", "Couples", "Family", "Friends", "Solo"];
 const ReviewUI = () => {
     const [userInput, setUserInput] = useState("");
     const [filteredOptions, setFilteredOptions] = useState([]);
-    const [review, setReview] = useState([]);
+    // const [review, setReview] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [reviewText, setReviewText] = useState("");
@@ -19,13 +19,44 @@ const ReviewUI = () => {
     const [rating, setRating] = useState(0);
     const [selectedOption, setSelectedOption] = useState("");
     const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = localStorage.getItem("authToken");
+                if (!token) {
+                    router.push("/login");
+                    return;
+                }
+
+                const response = await fetch("/api/users/profile", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error("Invalid or expired token");
+                }
+
+                const data = await response.json();
+                setUser(data);
+
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []); // Empty dependency array ensures this runs once
 
 
-    const [searchQuery, setSearchQuery] = useState(""); // Define searchQuery state
 
-    const filteredEvents = review.filter((review) =>
-        review.name && review.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
 
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -76,8 +107,12 @@ const ReviewUI = () => {
             setLoading(false);
             return;
         }
+        console.log(user.data);
+
 
         const reviewData = {
+            profileId: user.data._id,
+            username: user.data.username,
             title: titleText,
             content: reviewText,
             category: selectedCategory,

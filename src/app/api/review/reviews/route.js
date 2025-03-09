@@ -11,9 +11,10 @@ export async function POST(request,) {
 
 
 
-        const { content, title, when, who, category, rating } = await request.json();
+        const { profileId, username, content, title, when, who, category, rating } = await request.json();
         const newReview = new Review({
-            // profileId: user.profileId,
+            profileId,
+            username,
             title,
             content,
             when,

@@ -15,6 +15,7 @@ const Navbar = () => {
     useEffect(() => {
         const token = Cookies.get("authToken");
         setIsAuthenticated(!!token);
+        // setIsAuthenticated(!!authToken);
     }, []);
 
     // Function to handle clicks outside dropdowns

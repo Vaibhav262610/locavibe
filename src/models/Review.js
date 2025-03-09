@@ -6,6 +6,16 @@ const reviewSchema = new mongoose.Schema({
     //     ref: 'User',
     //     required: true,
     // },
+    username: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    profileId: {
+        type: String,
+        required: true,
+        trim: true,
+    },
     title: {
         type: String,
         required: true,
