@@ -174,21 +174,20 @@ const ReviewUI = () => {
                     </div>
                     <div className="relative w-[70rem] mt-40">
                         <h1 className="text-4xl font-black text-white">Your Reviews</h1>
-                        <input
-                            type="text"
-                            placeholder="Search your reviews..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full px-8 outline-none mt-12 py-3 border border-[#FFD9C4] rounded-xl text-gray-300"
-                        />
                         {loading ? (
                             <p className="text-gray-400">Loading reviews...</p>  // Show loading text
                         ) : review.length > 0 ? (
                             <div className="w-full flex flex-col flex-wrap justify-center gap-6 mt-12">
                                 {review.map((rev) => (
-                                    <div key={rev._id} className="bg-none shadow-lg rounded-lg p-6 max-w-[40rem] border border-white/10">
-                                        <h2 className="text-2xl font-thin text-blue-700">{rev.name}</h2>
-                                        <p className="text-gray-300">{rev.content}</p>
+                                    <div key={rev._id} className="bg-none shadow-lg flex-wrap flex flex-col rounded-lg p-6  border border-white/10">
+                                        <h2 className="text-2xl font-thin text-blue-700">{rev.titleText}</h2>
+                                        <h2 className="text-2xl font-thin text-blue-700">{rev.reviewText}</h2>
+                                        <h2 className="text-2xl font-thin text-blue-700">{rev.group}</h2>
+                                        <h2 className="text-2xl font-thin text-blue-700">{rev.category}</h2>
+                                        <h2 className="text-2xl font-thin text-blue-700">{rev.rating}</h2>
+                                        <h2 className="text-2xl font-thin text-blue-700">{rev.createdAt}</h2>
+                                        <h2 className="text-2xl font-thin text-blue-700">{rev.profileId}</h2>
+                                        <p className="text-gray-300 ">{rev.content}</p>
                                     </div>
                                 ))}
                             </div>
