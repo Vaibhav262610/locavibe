@@ -20,25 +20,7 @@ const ReviewUI = () => {
     const [selectedOption, setSelectedOption] = useState("");
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const response = await fetch("/api/review/get-reviews");
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log("Fetched Reviews:", data);  // Log the data
-                    setReview(data);
-                } else {
-                    console.error("Failed to fetch events:", response.status);
-                }
-            } catch (error) {
-                console.error("Error fetching events:", error);
-            } finally {
-                setLoading(false);  // Update: stop loading after fetch
-            }
-        };
-        fetchEvents();
-    }, []);
+
     const [searchQuery, setSearchQuery] = useState(""); // Define searchQuery state
 
     const filteredEvents = review.filter((review) =>
@@ -138,7 +120,7 @@ const ReviewUI = () => {
     };
 
     return (
-        <div className="flex flex-col mt-32 items-center p-8 min-h-screen">
+        <div className="flex h-screen  justify-center flex-col  items-center p-8 min-h-screen">
             {!selectedCategory ? (
                 <>
                     <h1 className="text-5xl text-[#FFD9C4] font-bold text-center">
@@ -172,30 +154,7 @@ const ReviewUI = () => {
                             </ul>
                         )}
                     </div>
-                    <div className="relative w-[70rem] mt-40">
-                        <h1 className="text-4xl font-black text-white">Your Reviews</h1>
-                        {loading ? (
-                            <p className="text-gray-400">Loading reviews...</p>  // Show loading text
-                        ) : review.length > 0 ? (
-                            <div className="w-full flex flex-col flex-wrap justify-center gap-6 mt-12">
-                                {review.map((rev) => (
-                                    <div key={rev._id} className="bg-none shadow-lg flex-wrap flex flex-col rounded-lg p-6  border border-white/10">
-                                        <h2 className="text-2xl font-thin text-blue-700">{rev.titleText}</h2>
-                                        <h2 className="text-2xl font-thin text-blue-700">{rev.reviewText}</h2>
-                                        <h2 className="text-2xl font-thin text-blue-700">{rev.group}</h2>
-                                        <h2 className="text-2xl font-thin text-blue-700">{rev.category}</h2>
-                                        <h2 className="text-2xl font-thin text-blue-700">{rev.rating}</h2>
-                                        <h2 className="text-2xl font-thin text-blue-700">{rev.createdAt}</h2>
-                                        <h2 className="text-2xl font-thin text-blue-700">{rev.profileId}</h2>
-                                        <p className="text-gray-300 ">{rev.content}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <p className="text-gray-400">No reviews available.</p>
-                        )}
 
-                    </div>
                 </>
             ) : (
                 <div className="flex gap-16 justify-center mt-32 ">
