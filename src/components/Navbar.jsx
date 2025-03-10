@@ -51,7 +51,9 @@ const Navbar = () => {
                     </div>
                 </Link>
                 <div className="flex text-[#D0D0D0] text-lg gap-5 md:gap-8 lg:gap-10">
-                    <h2 className="hover:opacity-70 duration-200 cursor-pointer">Discover</h2>
+                    <Link href="/discover">
+                        <h2 className="hover:opacity-70 duration-200 cursor-pointer">Discover</h2>
+                    </Link>
                     <h2 className="hover:opacity-70 duration-200 cursor-pointer">Trips</h2>
 
                     {/* Review Dropdown */}
@@ -125,7 +127,7 @@ const Navbar = () => {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
