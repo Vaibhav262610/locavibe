@@ -1,6 +1,7 @@
 import Header from '@/components/Header'
 // import Navbar from '@/components/Navbar'
 import Sections from '@/components/Sections'
+import Why from '@/components/Why'
 import React from 'react'
 
 const page = () => {
@@ -11,7 +12,8 @@ const page = () => {
           {/* <Navbar /> */}
           <Header />
           <Sections />
-          <Header />
+          {/* <Header /> */}
+          <Why />
         </div>
       </div>
     </>

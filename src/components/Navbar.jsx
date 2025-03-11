@@ -79,7 +79,7 @@ const Navbar = () => {
                         )}
                     </div>
 
-                    <h2 className="hover:opacity-70 duration-200 cursor-pointer">Forums</h2>
+                    <h2 className="hover:opacity-70 duration-200 cursor-pointer">Community</h2>
                 </div>
 
                 {/* Profile Dropdown */}

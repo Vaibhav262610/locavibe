@@ -27,9 +27,9 @@ const page = () => {
                     <div className="relative  cursor-pointer duration-200">
                         <button
                             onClick={toggleDropdown}
-                            className="border border-white rounded-full px-14 py-1 flex cursor-pointer duration-200  items-center"
+                            className="border border-white rounded-full px-14 py-3 flex cursor-pointer duration-200  items-center"
                         >
-                            World <ChevronDown className="ml-1" size={16} />
+                            Chandigarh <ChevronDown className="ml-1" size={16} />
                         </button>
                         {isDropdownOpen && (
                             <ul className="absolute left-0 mt-2 w-full border rounded-md shadow-lg bg-white text-black cursor-pointer duration-200 z-10">
