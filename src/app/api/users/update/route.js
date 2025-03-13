@@ -43,7 +43,6 @@ export async function PUT(req) {
         if (error instanceof jwt.JsonWebTokenError) {
             return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });
         }
-
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

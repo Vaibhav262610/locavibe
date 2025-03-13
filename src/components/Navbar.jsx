@@ -78,8 +78,9 @@ const Navbar = () => {
                             </div>
                         )}
                     </div>
-
-                    <h2 className="hover:opacity-70 duration-200 cursor-pointer">Community</h2>
+                    <Link href='/community'>
+                        <h2 className="hover:opacity-70 duration-200 cursor-pointer">Community</h2>
+                    </Link>
                 </div>
 
                 {/* Profile Dropdown */}

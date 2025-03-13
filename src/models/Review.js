@@ -51,6 +51,14 @@ const reviewSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    likes: {
+        type: Number,
+        default: 0
+    },
+    dislikes: {
+        type: Number,
+        default: 0
+    }
 });
 
 export default mongoose.models.Review || mongoose.model('Review', reviewSchema);
