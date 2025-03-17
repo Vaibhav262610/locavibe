@@ -2,6 +2,9 @@
 
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { FaHeart, FaStar } from "react-icons/fa";
+import { IoMdPricetag } from "react-icons/io";
+import { MdOutlineRestaurantMenu } from "react-icons/md";
 
 const page = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -23,7 +26,7 @@ const page = () => {
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
-                <div className='flex gap-4 text-[#FFD9C4] mt-12 w-full justify-center items-center'>
+                <div className='flex gap-6 text-[#FFD9C4] mt-12 w-full justify-center items-center'>
                     <div className="relative  cursor-pointer duration-200">
                         <button
                             onClick={toggleDropdown}
@@ -33,25 +36,76 @@ const page = () => {
                         </button>
                         {isDropdownOpen && (
                             <ul className="absolute left-0 mt-2 w-full border rounded-md shadow-lg bg-white text-black cursor-pointer duration-200 z-10">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Option 1</li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Option 2</li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Option 3</li>
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">More Places Coming Soon!</li>
+                                {/* <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Option 2</li>
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Option 3</li> */}
                             </ul>
                         )}
                     </div>
 
                     {/* <div className="flex items-center justify-center"> */}
-                    <div className="flex items-center justify-center border  border-white pl-8 rounded-full shadow-md px-4 py-2">
+                    <div className="flex items-center justify-center border  border-white pl-8 rounded-full shadow-md px-4 py-3">
                         <input
                             type="text"
                             placeholder="Search your vibe..."
-                            className="w-[50rem] outline-none text-[#D0D0D0] text-lg placeholder:text-[#D0D0D0]"
+                            className="w-[60rem] outline-none text-[#D0D0D0] text-lg placeholder:text-[#D0D0D0]"
                         />
                         {/* <button className="bg-green-400 cursor-pointer text-black font-semibold px-6 py-3 rounded-br-full rounded-tr-full rounded-bl-xl rounded-tl-xl">Search</button> */}
                     </div>
                     {/* </div> */}
 
+                </div>
+                <div className='mt-20'>
 
+                    <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-md p-4 flex gap-6">
+                        {/* Left Image Section */}
+                        <div className="w-[10rem">
+                            <img
+                                src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/d0/3f/cd/un-comedor-de-400-anos.jpg?w=500&h=400&s=1"
+                                alt="Restaurant"
+                                className="rounded-lg w-full h-full object-cover"
+                            />
+                        </div>
+
+                        {/* Right Content Section */}
+                        <div className="w-1/2 flex flex-col gap-3">
+                            <div className="flex justify-between items-start">
+                                <h2 className="text-4xl font-bold">Restaurante 1621</h2>
+                                <button className="text-gray-500 hover:text-red-500">
+                                    <FaHeart size={22} />
+                                </button>
+                            </div>
+                            <p className="text-blue-500 text-md">Cartagena, Colombia</p>
+                            <div className="flex items-center gap-1 text-green-600">
+                                {[...Array(4)].map((_, i) => (
+                                    <FaStar key={i} />
+                                ))}
+                                <span className="text-gray-700 ml-2">2,888 reviews</span>
+                            </div>
+                            <p className="text-gray-700 text-lg">
+                                Restaurante 1621 sets the scene with its upscale decor and romantic ambiance, perfect for an intimate evening...
+                                <span className="text-blue-500 cursor-pointer">Read more</span>
+                            </p>
+                            <div className="flex flex-wrap gap-2 text-sm mt-2">
+                                <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full">
+                                    <MdOutlineRestaurantMenu size={16} /> Contemporary, Healthy, Dining bars
+                                </span>
+                                <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full">
+                                    <IoMdPricetag size={16} /> ₹₹₹₹
+                                </span>
+                            </div>
+
+                            {/* Additional Content */}
+
+
+                            <div className="mt-4">
+                                <h3 className="text-xl font-semibold">Opening Hours</h3>
+                                <p className="text-gray-700">Monday - Sunday: 6:00 PM - 11:00 PM</p>
+                            </div>
+
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link";
 import React, { useState } from "react";
 import { FaHotel, FaCamera, FaUtensils, FaPlane, FaHome } from "react-icons/fa";
 
@@ -30,14 +31,16 @@ const page = () => {
                     </button>
                 ))}
             </div>
-            <div className="flex mt-4 items-center w-full max-w-2xl border border-white pl-8 rounded-full shadow-md px-4 py-2">
-                <input
-                    type="text"
-                    placeholder={activeSection.placeholder}
-                    className="flex-grow outline-none text-[#D0D0D0] text-lg placeholder:text-[#D0D0D0]"
-                />
-                <button className="bg-green-400 cursor-pointer text-black font-semibold px-6 py-3 rounded-br-full rounded-tr-full rounded-bl-xl rounded-tl-xl">Search</button>
-            </div>
+            <Link href='/discover'>
+                <div className="flex mt-4 items-center w-5xl border border-white pl-8 rounded-full shadow-md px-4 py-2">
+                    <input
+                        type="text"
+                        placeholder={activeSection.placeholder}
+                        className="flex-grow outline-none text-[#D0D0D0] text-lg placeholder:text-[#D0D0D0]"
+                    />
+                    <button className="bg-green-400 cursor-pointer text-black font-semibold px-6 py-3 rounded-br-full rounded-tr-full rounded-bl-xl rounded-tl-xl">Search</button>
+                </div>
+            </Link>
             <div className="mt-16 w-full flex bg-[#33e0a1] py-8 rounded-lg justify-center">
                 <img
                     src="https://media-cdn.tripadvisor.com/media/photo-o/2e/d9/f1/88/caption.jpg?w=1200&h=-1"
@@ -51,7 +54,7 @@ const page = () => {
                     <button className="text-white rounded-lg w-fit text-lg py-2 cursor-pointer bg-black font-semibold duration-200 px-7">Find your Vibe.</button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

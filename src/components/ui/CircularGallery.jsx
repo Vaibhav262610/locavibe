@@ -330,19 +330,21 @@ class App {
     }
     createMedias(items, bend = 1, textColor, borderRadius, font) {
         const defaultItems = [
-            { image: `https://picsum.photos/seed/1/800/600?grayscale`, text: 'Grocery Store' },
-            { image: `https://picsum.photos/seed/2/800/600?grayscale`, text: 'Electronics Shop' },
-            { image: `https://picsum.photos/seed/3/800/600?grayscale`, text: 'Clothing Boutique' },
-            { image: `https://picsum.photos/seed/4/800/600?grayscale`, text: 'Bakery' },
-            { image: `https://picsum.photos/seed/5/800/600?grayscale`, text: 'Bookstore' },
-            { image: `https://picsum.photos/seed/16/800/600?grayscale`, text: 'Pharmacy' },
-            { image: `https://picsum.photos/seed/17/800/600?grayscale`, text: 'Coffee Shop' },
-            { image: `https://picsum.photos/seed/8/800/600?grayscale`, text: 'Florist' },
-            { image: `https://picsum.photos/seed/9/800/600?grayscale`, text: 'Jewelry Store' },
-            { image: `https://picsum.photos/seed/10/800/600?grayscale`, text: 'Pet Shop' },
-            { image: `https://picsum.photos/seed/21/800/600?grayscale`, text: 'Hardware Store' },
-            { image: `https://picsum.photos/seed/12/800/600?grayscale`, text: "Sporting Goods" }
-        ]
+            { image: `https://images.pexels.com/photos/6865456/pexels-photo-6865456.jpeg?auto=compress&cs=tinysrgb&w=600`, text: 'Supermarket & Grocery' },
+            { image: `https://images.pexels.com/photos/3912983/pexels-photo-3912983.jpeg?auto=compress&cs=tinysrgb&w=600`, text: 'Electronics & Gadgets' },
+            { image: `https://images.pexels.com/photos/2870570/pexels-photo-2870570.jpeg`, text: 'Fashion & Apparel' },
+            { image: `https://images.pexels.com/photos/205961/pexels-photo-205961.jpeg?auto=compress&cs=tinysrgb&w=600`, text: 'Bakery & Confectionery' },
+            { image: `https://images.pexels.com/photos/2079451/pexels-photo-2079451.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`, text: 'Books & Stationery' },
+            { image: `https://5.imimg.com/data5/ANDROID/Default/2023/1/RW/JT/HD/94921520/product-jpeg-500x500.jpg`, text: 'Medical & Pharmacy' },
+            { image: `https://www.barniescoffee.com/cdn/shop/articles/bar-1869656_1920.jpg?v=1660683986`, text: 'Cafés & Coffee Shops' },
+            { image: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR42_x5fl8re7uuDfu28EFSnQVunPKHuE7cXw&s`, text: 'Flowers & Gifts' },
+            { image: `https://c8.alamy.com/comp/2XKNYW1/local-shops-at-har-ki-pauri-is-a-famous-ghat-on-the-banks-of-the-ganges-in-haridwar-uttarakhand-india-2XKNYW1.jpg`, text: 'Jewelry & Accessories' },
+            { image: `https://i.pinimg.com/236x/c2/a6/f9/c2a6f9bd60bd5e72d52b8d353235aaf6.jpg`, text: 'Pet Supplies & Services' },
+            { image: `https://5.imimg.com/data5/ANDROID/Default/2022/12/YU/WK/FR/94921520/product-jpeg.jpg`, text: 'Hardware & Home Improvement' },
+            { image: `https://s.alicdn.com/@sc04/kf/Hed6617b3cbdd493ca85bda1dcf74841fb.jpg_720x720q50.jpg`, text: 'Sports & Outdoor Gear' }
+        ];
+
+
 
         const galleryItems = items && items.length ? items : defaultItems
         this.mediasImages = galleryItems.concat(galleryItems)
