@@ -1,5 +1,7 @@
 "use client";
+// import UploadImage from "@/components/UploadImage";
 import withAuth from "@/lib/withAuth";
+// import { CldImage } from "next-cloudinary";
 // import axios from "axios";3wertwt
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
@@ -19,6 +21,7 @@ const ReviewUI = () => {
     const [rating, setRating] = useState(0);
     const [selectedOption, setSelectedOption] = useState("");
     const [loading, setLoading] = useState(false);
+    const [imageLoading, setImageLoading] = useState(false);
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -153,6 +156,39 @@ const ReviewUI = () => {
         setSelectedOption("")
         setLoading(false);
     };
+    const [file, setFile] = useState(null);
+    const [imageUrl, setImageUrl] = useState("");
+
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+
+    const handleUpload = async () => {
+        if (!file) return toast.error("Please select an image!");
+        setImageLoading(true); // Start loading
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res = await fetch("/api/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            const data = await res.json();
+            if (data.imageUrl) {
+                setImageUrl(data.imageUrl);
+            } else {
+                toast.error("Upload failed!");
+            }
+        } catch (error) {
+            toast.error("Upload error:", error);
+        } finally {
+            toast.success("Image Upload Successfully!")
+            setImageLoading(false); // Stop loading
+        }
+    };
 
     return (
         <div className="flex h-screen  justify-center flex-col  items-center p-8 min-h-screen">
@@ -269,8 +305,11 @@ const ReviewUI = () => {
 
                         {/* Photo Upload */}
                         <label className="block mt-8 text-gray-300 font-medium ">Add some photos (optional)</label>
-                        <div className="w-full h-40 border border-gray-300 flex items-center justify-center text-gray-500 rounded-lg mt-2">
-                            Click to add photos or drag and drop
+                        <div>
+                            <input type="file" onChange={handleFileChange} />
+
+                            <button onClick={handleUpload}>{imageLoading ? "Uploading..." : "Upload"}</button>
+                            {/* {imageUrl && <img src={imageUrl} alt="Uploaded" width="200" />} */}
                         </div>
 
                         {/* Checkbox Agreement */}
