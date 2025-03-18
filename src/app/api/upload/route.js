@@ -23,7 +23,7 @@ export async function POST(req) {
         // Upload to Cloudinary
         const uploadResponse = await new Promise((resolve, reject) => {
             cloudinary.uploader.upload_stream(
-                { folder: "nextjs_uploads" },
+                { folder: "locavibe_reviews" },
                 (error, result) => {
                     if (error) reject(error);
                     else resolve(result);
@@ -31,7 +31,7 @@ export async function POST(req) {
             ).end(buffer);
         });
 
-        return NextResponse.json({ imageUrl: uploadResponse.secure_url });
+        return NextResponse.json({ Url: uploadResponse.secure_url });
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

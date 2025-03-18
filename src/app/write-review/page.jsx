@@ -168,6 +168,7 @@ const ReviewUI = () => {
         setImageLoading(true); // Start loading
 
         const formData = new FormData();
+
         formData.append("file", file);
 
         try {
@@ -177,11 +178,13 @@ const ReviewUI = () => {
             });
 
             const data = await res.json();
-            if (data.imageUrl) {
-                setImageUrl(data.imageUrl);
+
+            if (data.Url) {
+                setImageUrl(data.Url);
             } else {
                 toast.error("Upload failed!");
             }
+            console.log(data);
         } catch (error) {
             toast.error("Upload error:", error);
         } finally {
