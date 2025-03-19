@@ -14,5 +14,5 @@ export function middleware(req) {
 }
 
 export const config = {
-    matcher: ['/discover', '/profile', '/confirm-attendance', '/scan', '/attendance-marked', '/community', '/event-dashboard'], // Specify the paths you want to protect
+    matcher: ['/discover', '/profile', '/write-review'], // Specify the paths you want to protect
 };

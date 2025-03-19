@@ -8,7 +8,7 @@ connectDb();
 
 export async function POST(request) {
     try {
-        const token = request.cookies.get('token')?.value;
+        const token = request.cookies.get('token')?.value || request.cookies.get('authToken')?.value;
         if (token) {
             try {
                 const decoded = jwt.verify(token, process.env.TOKEN_SECRET);

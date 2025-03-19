@@ -312,7 +312,7 @@ const ReviewUI = () => {
                             <input type="file" onChange={handleFileChange} />
 
                             <button onClick={handleUpload}>{imageLoading ? "Uploading..." : "Upload"}</button>
-                            {/* {imageUrl && <img src={imageUrl} alt="Uploaded" width="200" />} */}
+                            {imageUrl && <img src={imageUrl} alt="Uploaded" width="200" />}
                         </div>
 
                         {/* Checkbox Agreement */}

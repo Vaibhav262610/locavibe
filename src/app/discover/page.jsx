@@ -1,17 +1,29 @@
 "use client"
 
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
-import { FaHeart, FaStar } from "react-icons/fa";
-import { IoMdPricetag } from "react-icons/io";
-import { MdOutlineRestaurantMenu } from "react-icons/md";
+import { ChevronDown } from 'lucide-react';
+import { useEffect } from 'react';
+import { FaStar, FaHeart } from 'react-icons/fa';
+import { MdOutlineRestaurantMenu } from 'react-icons/md';
+import { IoMdPricetag } from 'react-icons/io';
 
 const page = () => {
+    const [restaurants, setRestaurants] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
+    useEffect(() => {
+        async function fetchRestaurants() {
+            const response = await fetch('/api/restaurant');
+            const data = await response.json();
+            if (data.success) {
+                setRestaurants(data.data);
+            }
+        }
+        fetchRestaurants();
+    }, []);
 
     return (
         <>
@@ -57,55 +69,60 @@ const page = () => {
                 </div>
                 <div className='mt-20'>
 
-                    <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-md p-4 flex gap-6">
-                        {/* Left Image Section */}
-                        <div className="w-[10rem">
-                            <img
-                                src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/d0/3f/cd/un-comedor-de-400-anos.jpg?w=500&h=400&s=1"
-                                alt="Restaurant"
-                                className="rounded-lg w-full h-full object-cover"
-                            />
-                        </div>
+                    <div className="min-h-screen flex items-center justify-center ">
+                        <div className="flex gap-6">
+                            {restaurants.map((restaurant) => (
 
-                        {/* Right Content Section */}
-                        <div className="w-1/2 flex flex-col gap-3">
-                            <div className="flex justify-between items-start">
-                                <h2 className="text-4xl font-bold">Restaurante 1621</h2>
-                                <button className="text-gray-500 hover:text-red-500">
-                                    <FaHeart size={22} />
-                                </button>
-                            </div>
-                            <p className="text-blue-500 text-md">Cartagena, Colombia</p>
-                            <div className="flex items-center gap-1 text-green-600">
-                                {[...Array(4)].map((_, i) => (
-                                    <FaStar key={i} />
-                                ))}
-                                <span className="text-gray-700 ml-2">2,888 reviews</span>
-                            </div>
-                            <p className="text-gray-700 text-lg">
-                                Restaurante 1621 sets the scene with its upscale decor and romantic ambiance, perfect for an intimate evening...
-                                <span className="text-blue-500 cursor-pointer">Read more</span>
-                            </p>
-                            <div className="flex flex-wrap gap-2 text-sm mt-2">
-                                <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full">
-                                    <MdOutlineRestaurantMenu size={16} /> Contemporary, Healthy, Dining bars
-                                </span>
-                                <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full">
-                                    <IoMdPricetag size={16} /> ₹₹₹₹
-                                </span>
-                            </div>
+                                <div key={restaurant._id} className="max-w-7xl mx-auto bg-white rounded-lg shadow-md p-4 flex gap-6">
 
-                            {/* Additional Content */}
+                                    <div className="w-[10rem">
+                                        <img
+                                            src={restaurant.imageUrl}
+                                            alt="Image not found"
+                                            className="rounded-lg w-full h-full object-cover"
+                                        />
+                                    </div>
 
-
-                            <div className="mt-4">
-                                <h3 className="text-xl font-semibold">Opening Hours</h3>
-                                <p className="text-gray-700">Monday - Sunday: 6:00 PM - 11:00 PM</p>
-                            </div>
+                                    <div className="w-1/2 flex flex-col gap-3">
+                                        <div className="flex justify-between items-start">
+                                            <h2 className="text-4xl font-bold">Restaurante 1621</h2>
+                                            <button className="text-gray-500 hover:text-red-500">
+                                                <FaHeart size={22} />
+                                            </button>
+                                        </div>
+                                        <p className="text-blue-500 text-md">Cartagena, Colombia</p>
+                                        <div className="flex items-center gap-1 text-green-600">
+                                            {[...Array(4)].map((_, i) => (
+                                                <FaStar key={i} />
+                                            ))}
+                                            <span className="text-gray-700 ml-2">2,888 reviews</span>
+                                        </div>
+                                        <p className="text-gray-700 text-lg">
+                                            Restaurante 1621 sets the scene with its upscale decor and romantic ambiance, perfect for an intimate evening...
+                                            <span className="text-blue-500 cursor-pointer">Read more</span>
+                                        </p>
+                                        <div className="flex flex-wrap gap-2 text-sm mt-2">
+                                            <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full">
+                                                <MdOutlineRestaurantMenu size={16} /> Contemporary, Healthy, Dining bars
+                                            </span>
+                                            <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full">
+                                                <IoMdPricetag size={16} /> ₹₹₹₹
+                                            </span>
+                                        </div>
 
 
+                                        <div className="mt-4">
+                                            <h3 className="text-xl font-semibold">Opening Hours</h3>
+                                            <p className="text-gray-700">Monday - Sunday: 6:00 PM - 11:00 PM</p>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
+
                 </div>
             </div>
         </>

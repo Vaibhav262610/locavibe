@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
+import { redirect } from "next/navigation";
 
 const Navbar = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -108,9 +109,14 @@ const Navbar = () => {
                                     </Link>
                                     <button
                                         onClick={() => {
-                                            Cookies.remove("authToken");
+                                            Cookies.remove("token", { path: "/" });
+                                            // Cookies.remove("authToken");
+                                            // localStorage.removeItem('token')
+                                            localStorage.removeItem('token')
+                                            localStorage.removeItem('authToken')
                                             setIsAuthenticated(false);
                                             setIsDropdownOpen(false);
+                                            redirect('/login')
                                         }}
                                         className="block w-full text-left px-4 py-3 hover:bg-gray-200"
                                     >

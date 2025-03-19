@@ -37,7 +37,7 @@ const Page = () => {
                     window.location.href = "/";
                 }, 1500);
             } else {
-                toast.error(data.error || "Login failed");
+                toast.error(data.error || "User Already Logged In");
             }
         } catch (error) {
             console.error("Login error:", error);

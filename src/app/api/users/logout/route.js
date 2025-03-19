@@ -6,8 +6,8 @@ connectDb();
 export async function GET(request) {
     try {
         // Check if the user is already logged out (no token in cookies)
-        const token = request.cookies.get('token')?.value;
-        if (!token) {
+        const token = request.cookies.get('token')?.value && request.cookies.get('authToken')?.value;
+        if (!token && !authToken) {
             return NextResponse.json(
                 { message: 'USER ALREADY LOGGED OUT', success: false },
                 { status: 400 }
