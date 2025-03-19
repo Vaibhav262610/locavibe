@@ -69,7 +69,7 @@ const page = () => {
                 </div>
                 <div className='mt-20'>
 
-                    <div className="min-h-screen flex items-center justify-center ">
+                    <div className=" flex-col flex justify-center ">
                         <div className="flex gap-6">
                             {restaurants.map((restaurant) => (
 
@@ -85,35 +85,35 @@ const page = () => {
 
                                     <div className="w-1/2 flex flex-col gap-3">
                                         <div className="flex justify-between items-start">
-                                            <h2 className="text-4xl font-bold">Restaurante 1621</h2>
+                                            <h2 className="text-4xl font-bold">{restaurant.name}</h2>
                                             <button className="text-gray-500 hover:text-red-500">
-                                                <FaHeart size={22} />
+                                                <FaHeart size={30} />
                                             </button>
                                         </div>
-                                        <p className="text-blue-500 text-md">Cartagena, Colombia</p>
+                                        <p className="text-blue-500 text-md">{restaurant.location}</p>
                                         <div className="flex items-center gap-1 text-green-600">
                                             {[...Array(4)].map((_, i) => (
                                                 <FaStar key={i} />
                                             ))}
-                                            <span className="text-gray-700 ml-2">2,888 reviews</span>
+                                            <span className="text-gray-700 ml-2">{restaurant.reviews}</span>
                                         </div>
                                         <p className="text-gray-700 text-lg">
-                                            Restaurante 1621 sets the scene with its upscale decor and romantic ambiance, perfect for an intimate evening...
+                                            {restaurant.description}...
                                             <span className="text-blue-500 cursor-pointer">Read more</span>
                                         </p>
                                         <div className="flex flex-wrap gap-2 text-sm mt-2">
                                             <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full">
-                                                <MdOutlineRestaurantMenu size={16} /> Contemporary, Healthy, Dining bars
+                                                <MdOutlineRestaurantMenu size={20} />{restaurant.category}
                                             </span>
                                             <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full">
-                                                <IoMdPricetag size={16} /> ₹₹₹₹
+                                                <IoMdPricetag size={20} /> ₹{restaurant.priceRange}
                                             </span>
                                         </div>
 
 
                                         <div className="mt-4">
                                             <h3 className="text-xl font-semibold">Opening Hours</h3>
-                                            <p className="text-gray-700">Monday - Sunday: 6:00 PM - 11:00 PM</p>
+                                            <p className="text-gray-700">{restaurant.openingHours}</p>
                                         </div>
 
 

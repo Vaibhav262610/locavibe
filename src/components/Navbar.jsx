@@ -104,6 +104,9 @@ const Navbar = () => {
                                     <Link href="/my-reviews" className="block px-4 py-3 hover:bg-gray-200">
                                         My Reviews
                                     </Link>
+                                    <Link href="/saved" className="block px-4 py-3 hover:bg-gray-200">
+                                        Saved
+                                    </Link>
                                     <Link href="/settings" className="block px-4 py-3 hover:bg-gray-200">
                                         Settings
                                     </Link>
