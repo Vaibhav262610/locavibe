@@ -19,6 +19,10 @@ const page = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [newUsername, setNewUsername] = useState("");
     const router = useRouter();
+    const [isAdmin, setIsAdmin] = useState(false)
+
+    const adminEmailId = "vaibhav@gmail.com"
+    const adminUserName = "vaibhav"
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -44,6 +48,13 @@ const page = () => {
                 const data = await response.json();
                 setUser(data);
                 setNewUsername(data.data.username); // Set initial username
+                if (adminUserName == data.data.username && adminEmailId == data.data.email) {
+                    setIsAdmin(true)
+                }
+                console.log(adminUserName);
+                console.log(data.data.username);
+
+
 
                 setProfilePic(
                     randomProfilePics[
@@ -152,7 +163,23 @@ const page = () => {
                 </div>
                 <p className="text-gray-600">{user.data.email}</p>
 
-                <div className="flex flex-col gap-2">
+                {isAdmin ? <div className="flex flex-col gap-2">
+                    <Link href="/admin">
+                        <button
+                            className="mt-4 px-6 py-2 w-full bg-green-400 text-white rounded-md hover:bg-green-400"
+                        >
+                            Admin
+                        </button>
+                    </Link>
+                    <Link href="/admin">
+                        <button
+                            onClick={() => router.push("/discover")}
+                            className="mt-4 px-6 py-2 w-full bg-red-500 text-white rounded-md hover:bg-red-600"
+                        >
+                            Log Out
+                        </button>
+                    </Link>
+                </div> : <div className="flex flex-col gap-2">
                     <Link href="/logout">
                         <button
                             onClick={() => router.push("/discover")}
@@ -161,7 +188,7 @@ const page = () => {
                             Log Out
                         </button>
                     </Link>
-                </div>
+                </div>}
             </div>
         </div>
     );

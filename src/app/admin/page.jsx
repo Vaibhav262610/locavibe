@@ -23,8 +23,8 @@ const Page = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
 
-    const adminEmailId = "vaibhav@gmail.com";
-    const adminUserName = "vaibhav";
+    const adminEmailId = "vaibhav@gmail.com"
+    const adminUserName = "vaibhav"
 
     useEffect(() => {
         const checkAdmin = async () => {

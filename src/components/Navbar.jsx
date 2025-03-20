@@ -13,6 +13,8 @@ const Navbar = () => {
     const profileDropdownRef = useRef(null);
     const reviewDropdownRef = useRef(null);
 
+
+
     useEffect(() => {
         const token = Cookies.get("authToken");
         setIsAuthenticated(!!token);
@@ -79,7 +81,7 @@ const Navbar = () => {
                             </div>
                         )}
                     </div>
-                    <Link href='/community'>
+                    <Link href='/community  '>
                         <h2 className="hover:opacity-70 duration-200 cursor-pointer">Community</h2>
                     </Link>
                 </div>

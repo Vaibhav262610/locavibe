@@ -24,3 +24,24 @@ body {
   background: #555;
   animation-duration: 0.4s;
 }
+
+@keyframes grid-flow {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: -50px -50px;
+  }
+}
+
+.animate-grid-flow {
+  background-size: 50px 50px;
+  background-image: linear-gradient(to right,
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px),
+    linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px);
+  animation: grid-flow 20s linear infinite;
+}
