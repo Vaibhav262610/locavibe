@@ -3,6 +3,8 @@
 import withAuth from '@/lib/withAuth';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { ThumbsUp, ThumbsDown, User, Calendar } from 'lucide-react';
 
 const Page = () => {
     const [loading, setLoading] = useState(true);
@@ -77,7 +79,6 @@ const Page = () => {
                 throw new Error(data.message || "Failed to update vote");
             }
 
-            // Update the state
             setReviews((prevReviews) =>
                 prevReviews.map((rev) =>
                     rev._id === reviewId
@@ -90,39 +91,46 @@ const Page = () => {
         }
     };
 
-
     return (
-        <div className='flex justify-center w-full items-center'>
-            <div className="relative w-[70rem] mt-40">
-                <h1 className="text-3xl text-white">Your Reviews</h1>
+        <div className='flex justify-center w-full items-center min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 px-6'>
+            <div className="relative w-full max-w-3xl mt-32">
+                <h1 className="text-4xl font-bold text-white text-center mb-6">People's Reviews</h1>
                 {loading ? (
-                    <p className="text-gray-400">Loading reviews...</p>
+                    <p className="text-gray-400 text-center">Loading reviews...</p>
                 ) : reviews.length > 0 ? (
-                    <div className="w-full flex flex-col flex-wrap justify-center gap-6 mt-12">
+                    <div className="flex flex-col gap-6 mt-6">
                         {reviews.map((rev) => (
-                            <div key={rev._id} className="bg-none shadow-lg flex flex-col gap-6 rounded-lg p-6 border border-white/10">
-                                <h2 className="text-4xl font-black text-[#FFD9C4]">{rev.title}</h2>
-                                <p className="text-white text-xl">{rev.content}</p>
-                                <div className="flex justify-between">
-                                    <h2 className="text-md font-thin text-[#33e0a1]">Reviewed by: {rev.username}</h2>
-                                    <h2 className="text-md font-thin text-[#33e0a1]">Reviewed on {new Date(rev.createdAt).toLocaleDateString()}</h2>
+                            <motion.div
+                                key={rev._id}
+                                className="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 transition hover:scale-105 hover:border-gray-500"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                            >
+                                <h2 className="text-2xl font-semibold text-[#FFD9C4] mb-4">{rev.title}</h2>
+                                <p className="text-white text-lg mb-4">{rev.content}</p>
+                                <div className="flex justify-between items-center text-gray-400 text-sm">
+                                    <span className="flex items-center gap-2"><User size={16} /> {rev.username}</span>
+                                    <span className="flex items-center gap-2"><Calendar size={16} /> {new Date(rev.createdAt).toLocaleDateString()}</span>
                                 </div>
-
-                                {/* Like & Dislike Buttons */}
-                                <div className="flex gap-4 mt-4">
-                                    <button onClick={() => handleVote(rev._id, "like")} className="px-4 py-2 bg-green-500 rounded">
-                                        👍 {rev.likes}
+                                <div className="flex gap-4 mt-6">
+                                    <button
+                                        onClick={() => handleVote(rev._id, "like")}
+                                        className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition"
+                                    >
+                                        <ThumbsUp size={18} /> {rev.likes}
                                     </button>
-                                    <button onClick={() => handleVote(rev._id, "dislike")} className="px-4 py-2 bg-red-500 rounded">
-                                        👎 {rev.dislikes}
+                                    <button
+                                        onClick={() => handleVote(rev._id, "dislike")}
+                                        className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition"
+                                    >
+                                        <ThumbsDown size={18} /> {rev.dislikes}
                                     </button>
                                 </div>
-                            </div>
+                            </motion.div>
                         ))}
-
                     </div>
                 ) : (
-                    <p className="text-gray-400">No reviews available.</p>
+                    <p className="text-gray-400 text-center">No reviews available.</p>
                 )}
             </div>
         </div>
