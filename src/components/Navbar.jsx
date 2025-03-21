@@ -115,24 +115,21 @@ const Navbar = () => {
                     initial={{ opacity: 0, x: "-100%" }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: "-100%" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }} // Adjust spring properties for smooth sliding
                     className="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center z-50"
                 >
                     {/* Close Button */}
                     <HiX className="absolute top-8 right-8 text-white text-5xl cursor-pointer hover:opacity-80" onClick={() => setIsMobileMenuOpen(false)} />
 
-                    {/* Animated Menu Items */}
-                    <motion.div
-                        initial={{ y: 50, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.1 }}
-                        className="flex flex-col gap-8 text-3xl font-bold text-white text-center"
-                    >
+                    {/* Menu Items */}
+                    <div className="flex flex-col gap-8 text-3xl font-bold text-white text-center">
                         <Link href="/discover" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#33e0a1] duration-200">Discover</Link>
                         <h2 className="hover:text-[#33e0a1] duration-200 cursor-pointer">Trips</h2>
                         <Link href="/community" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#33e0a1] duration-200">Community</Link>
-                    </motion.div>
+                    </div>
                 </motion.div>
             )}
+
         </div>
     );
 };

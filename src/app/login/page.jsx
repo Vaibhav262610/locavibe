@@ -47,32 +47,32 @@ const Page = () => {
     };
 
     return (
-        <div className="relative min-h-screen flex justify-center items-center px-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+        <div className="relative min-h-screen flex justify-center items-center px-3 sm:px-5 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
             {/* Glassmorphism Card */}
-            <div className="relative z-10 w-full max-w-md bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-lg border border-white/20">
-                <h2 className="text-3xl font-semibold text-center mb-6 text-white">
+            <div className="relative z-10 w-full max-w-xs sm:max-w-sm bg-white/10 backdrop-blur-lg p-5 sm:p-6 rounded-lg sm:rounded-xl shadow-lg border border-white/20">
+                <h2 className="text-xl sm:text-2xl font-semibold text-center mb-3 sm:mb-5 text-white">
                     Welcome Back 👋
                 </h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-5">
                     <div>
-                        <label className="block text-sm font-medium text-gray-300">
+                        <label className="block text-xs sm:text-sm font-medium text-gray-300">
                             Email
                         </label>
                         <input
                             type="email"
-                            className="mt-1 w-full p-3 bg-gray-800/50 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition"
+                            className="mt-1 w-full p-2 sm:p-2.5 bg-gray-800/50 text-white rounded-md border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-300">
+                        <label className="block text-xs sm:text-sm font-medium text-gray-300">
                             Password
                         </label>
                         <input
                             type="password"
-                            className="mt-1 w-full p-3 bg-gray-800/50 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition"
+                            className="mt-1 w-full p-2 sm:p-2.5 bg-gray-800/50 text-white rounded-md border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -80,7 +80,7 @@ const Page = () => {
                     </div>
                     <button
                         type="submit"
-                        className={`w-full py-3 rounded-lg text-white font-semibold flex justify-center items-center transition-all ${loading
+                        className={`w-full py-2 sm:py-2.5 rounded-md text-white font-semibold flex justify-center items-center transition-all ${loading
                             ? "bg-gray-500 cursor-not-allowed"
                             : "bg-teal-500 hover:bg-teal-600 transform hover:scale-105"
                             }`}
@@ -89,7 +89,7 @@ const Page = () => {
                         {loading ? (
                             <div className="flex items-center gap-2">
                                 <svg
-                                    className="animate-spin h-5 w-5 text-white"
+                                    className="animate-spin h-4 w-4 sm:h-4 sm:w-4 text-white"
                                     viewBox="0 0 24 24"
                                 >
                                     <circle
@@ -113,9 +113,9 @@ const Page = () => {
                         )}
                     </button>
                 </form>
-                <div className="text-center mt-4">
-                    <p className="text-sm text-gray-400">
-                        Don't have an account?{" "}
+                <div className="text-center mt-2 sm:mt-3">
+                    <p className="text-xs text-gray-400">
+                        Don't have an account? {" "}
                         <a
                             href="/signup"
                             className="text-teal-400 hover:text-teal-500 transition"
