@@ -1,7 +1,7 @@
 "use client"
 
 import Header from '@/components/Header'
-// import Navbar from '@/components/Navbar'
+import Navbar from '@/components/Navbar'
 import Sections from '@/components/Sections'
 import Loader from '@/components/ui/Loader'
 import Why from '@/components/Why'
@@ -25,9 +25,9 @@ const Home = () => {
     <>
       <div className='w-full flex justify-center items-center '>
         <div className='w-[60%]'>
-          {/* <Navbar /> */}
-          <Header />
-          <Sections />
+          <Navbar />
+          {/* <Header /> */}
+          {/* <Sections /> */}
           {/* <Header /> */}
           <Why />
         </div>
