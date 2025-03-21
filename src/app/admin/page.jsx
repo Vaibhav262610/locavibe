@@ -71,7 +71,7 @@ const Page = () => {
     if (isLoading) {
         return (
             <div className="h-screen w-full flex justify-center items-center bg-gray-900">
-                <h1 className="text-3xl text-green-400 animate-pulse">
+                <h1 className="text-sm text-teal-400 animate-pulse text-center">
                     Checking Admin Credentials...
                 </h1>
             </div>
@@ -132,32 +132,39 @@ const Page = () => {
     };
 
     return (
-        <div className="h-screen w-full flex justify-center items-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
-            <div className="relative z-10 w-full max-w-4xl bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-xl border border-white/20">
-                <h2 className="text-3xl font-bold text-center text-teal-400 mb-6">
+        <div className="h-screen mb-20 mt-40 w-full flex justify-center items-center  p-6">
+            <div className="relative z-10 w-full max-w-lg sm:max-w-md bg-white/10 backdrop-blur-lg p-6 sm:p-8 rounded-2xl shadow-xl border border-white/20">
+                <h2 className="text-xl md:text-3xl font-bold text-center text-teal-400 mb-6">
                     📍 Add a Restaurant
                 </h2>
 
-                <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6">
-                    {[
-                        { name: "name", placeholder: "Restaurant Name", emoji: "🏠" },
-                        { name: "location", placeholder: "Location", emoji: "📍" },
-                        { name: "imageUrl", placeholder: "Image URL", emoji: "🖼️" },
-                        { name: "rating", placeholder: "Rating (1-5)", emoji: "⭐", type: "number" },
-                        { name: "reviews", placeholder: "Number of Reviews", emoji: "📝", type: "number" },
-                        { name: "categories", placeholder: "Categories (comma separated)", emoji: "📂" },
-                        { name: "priceRange", placeholder: "Price Range", emoji: "💰" },
-                        { name: "openingHours", placeholder: "Opening Hours", emoji: "⏰" },
-                    ].map((field) => (
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
+                    {[{
+                        name: "name", placeholder: "Restaurant Name", emoji: "🏠"
+                    }, {
+                        name: "location", placeholder: "Location", emoji: "📍"
+                    }, {
+                        name: "imageUrl", placeholder: "Image URL", emoji: "🖼️"
+                    }, {
+                        name: "rating", placeholder: "Rating (1-5)", emoji: "⭐", type: "number"
+                    }, {
+                        name: "reviews", placeholder: "Number of Reviews", emoji: "📝", type: "number"
+                    }, {
+                        name: "categories", placeholder: "Categories (comma separated)", emoji: "📂"
+                    }, {
+                        name: "priceRange", placeholder: "Price Range", emoji: "💰"
+                    }, {
+                        name: "openingHours", placeholder: "Opening Hours", emoji: "⏰"
+                    }].map((field) => (
                         <div key={field.name}>
-                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                            <label className="block text-xs font-medium text-gray-300 mb-1">
                                 {field.emoji} {field.placeholder}
                             </label>
                             <input
                                 type={field.type || "text"}
                                 name={field.name}
                                 placeholder={field.placeholder}
-                                className="w-full p-3 bg-gray-800/50 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition"
+                                className="w-full p-3 bg-gray-800/50 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition text-xs"
                                 onChange={handleChange}
                                 value={formData[field.name]}
                                 required
@@ -165,21 +172,21 @@ const Page = () => {
                         </div>
                     ))}
 
-                    <div className="col-span-2">
-                        <label className="block text-sm font-medium text-gray-300 mb-1">
+                    <div className="col-span-1">
+                        <label className="block text-xs font-medium text-gray-300 mb-1">
                             📝 Description
                         </label>
                         <textarea
                             name="description"
                             placeholder="Description"
-                            className="w-full p-3 bg-gray-800/50 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition"
+                            className="w-full p-3 bg-gray-800/50 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition text-xs"
                             onChange={handleChange}
                             value={formData.description}
                             required
                         />
                     </div>
 
-                    <div className="col-span-2 flex justify-center">
+                    <div className="col-span-1 flex justify-center">
                         <button
                             type="submit"
                             className={`w-full max-w-sm py-3 rounded-lg text-white font-semibold flex justify-center items-center transition-all ${loading

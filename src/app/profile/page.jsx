@@ -83,23 +83,26 @@ const ProfilePage = () => {
     };
 
     if (loading) {
+
         return (
-            <div className="flex justify-center items-center h-screen bg-gray-900 text-white">
+            <div className="flex justify-center flex-col items-center h-screen bg-[#121b22]/10">
                 <img
-                    // animate={{ rotate: 360 }}
-                    // transition={{ repeat: Infinity, duration: 2 }}
-                    className="w-24 h-24"
-                    src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMng0bjlnb3Z1Zmo1N3kxcmoyemw0M3MwNGs3amszemdjbjJtM2FydyZlcD12MV9pbnRlcm5fYnlfaWQmY3Q9cw/6KKKVerzrhjRrClNKt/giphy.gif"
+                    className=" select-none md:w-auto w-72"
+
+                    src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMng0bjlnb3Z1Zmo1N3kxcmoyemw0M3MwNGs3amszemdjbjJtM2FydyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/6KKKVerzrhjRrClNKt/giphy.gif"
                     alt="Loading..."
                 />
-                <p className="ml-4 text-2xl font-light">Loading...</p>
+                <p className="mt-4 nav font-thin text-xl md:text-3xl text-white">
+                    Loading...
+                </p>
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-6">
-            <motion.div className="bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-sm text-center"
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+            <motion.div
+                className="bg-gray-800 p-4 rounded-lg shadow-xl w-full max-w-xs text-center"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
             >
@@ -107,48 +110,48 @@ const ProfilePage = () => {
                     whileHover={{ scale: 1.1 }}
                     src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/d95c1f148207527.62d1246c25004.jpg"
                     alt="Profile"
-                    className="w-24 h-24 mx-auto rounded-full border-4 border-indigo-500"
+                    className="w-20 h-20 mx-auto rounded-full border-4 border-indigo-500"
                 />
-                <div className="mt-4 flex items-center justify-center gap-2">
+                <div className="mt-2 flex items-center justify-center gap-2">
                     {isEditing ? (
                         <input
                             type="text"
                             value={newUsername}
                             onChange={(e) => setNewUsername(e.target.value)}
-                            className="border p-2 text-center rounded-md bg-gray-700 text-white focus:outline-none"
+                            className="border p-2 text-sm text-center rounded-md bg-gray-700 text-white focus:outline-none"
                             onKeyDown={(e) => e.key === "Enter" && updateUsername()}
                         />
                     ) : (
-                        <h2 className="text-2xl font-semibold">{user.data.username}</h2>
+                        <h2 className="text-lg sm:text-xl font-semibold">{user.data.username}</h2>
                     )}
                     <button
                         onClick={() => (isEditing ? updateUsername() : setIsEditing(true))}
                         className="ml-2 p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600"
                     >
-                        <FaUserEdit size={18} />
+                        <FaUserEdit size={16} />
                     </button>
                 </div>
-                <p className="text-gray-400 mt-2">{user.data.email}</p>
+                <p className="text-gray-400 mt-1 text-sm">{user.data.email}</p>
                 {isAdmin ? (
                     <div className="flex flex-col gap-2 mt-4">
                         <Link href="/admin">
-                            <button className="flex items-center justify-center gap-2 w-full p-3 bg-green-500 text-white rounded-md hover:bg-green-600">
-                                <MdAdminPanelSettings size={20} /> Admin Panel
+                            <button className="flex items-center justify-center gap-2 w-full p-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                                <MdAdminPanelSettings size={18} /> Admin Panel
                             </button>
                         </Link>
                         <button
                             onClick={() => router.push("/discover")}
-                            className="flex items-center justify-center gap-2 w-full p-3 bg-red-500 text-white rounded-md hover:bg-red-600"
+                            className="flex items-center justify-center gap-2 w-full p-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                         >
-                            <FiLogOut size={20} /> Log Out
+                            <FiLogOut size={18} /> Log Out
                         </button>
                     </div>
                 ) : (
                     <button
                         onClick={() => router.push("/discover")}
-                        className="mt-4 flex items-center justify-center gap-2 w-full p-3 bg-red-500 text-white rounded-md hover:bg-red-600"
+                        className="mt-4 flex items-center justify-center gap-2 w-full p-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                     >
-                        <FiLogOut size={20} /> Log Out
+                        <FiLogOut size={18} /> Log Out
                     </button>
                 )}
             </motion.div>
