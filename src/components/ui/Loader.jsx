@@ -18,11 +18,12 @@ const Loader = () => {
     return (
         <div className="flex justify-center flex-col items-center h-screen bg-[#121b22]/10">
             <img
-                className=" select-none    "
+                className=" select-none md:w-auto w-72"
+
                 src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMng0bjlnb3Z1Zmo1N3kxcmoyemw0M3MwNGs3amszemdjbjJtM2FydyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/6KKKVerzrhjRrClNKt/giphy.gif"
                 alt="Loading..."
             />
-            <p className="mt-4 nav font-thin text-3xl text-white">
+            <p className="mt-4 nav font-thin text-xl md:text-3xl text-white">
                 Loading{dots}
             </p>
         </div>
