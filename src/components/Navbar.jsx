@@ -41,14 +41,14 @@ const Navbar = () => {
             <div className="bg-[#121b22] text-[#FFD9C4] w-full xl:w-[75%] fixed top-0 z-50 flex items-center justify-between py-7 px-6 md:px-10 lg:px-34">
                 {/* Mobile Menu Button */}
                 <div className="xl:hidden">
-                    <HiMenu className="text-4xl cursor-pointer" onClick={() => setIsMobileMenuOpen(true)} />
+                    <HiMenu className="text-2xl cursor-pointer" onClick={() => setIsMobileMenuOpen(true)} />
                 </div>
 
                 {/* Logo */}
                 <Link href="/">
                     <div className="flex gap-2">
                         <Image src="/logo.png" width={40} height={20} alt="LocaVibe Logo" />
-                        <h1 className="font-black text-4xl">Loca<span className="text-[#33e0a1]">vibe</span>.</h1>
+                        <h1 className="font-black text-2xl md:text-4xl">Loca<span className="text-[#33e0a1]">vibe</span>.</h1>
                     </div>
                 </Link>
 
