@@ -125,6 +125,16 @@ const Navbar = () => {
                     <div className="flex flex-col gap-8 text-3xl font-bold text-white text-center">
                         <Link href="/discover" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#33e0a1] duration-200">Discover</Link>
                         <h2 className="hover:text-[#33e0a1] duration-200 cursor-pointer">Trips</h2>
+                        <div className="relative" ref={reviewDropdownRef}>
+                            <h2 className="hover:opacity-70 duration-200 cursor-pointer" onClick={() => setIsReviewDropdownOpen(!isReviewDropdownOpen)}>Review</h2>
+                            {isReviewDropdownOpen && (
+                                <div className="absolute left-0 mt-2 text-sm font-semibold w-40 bg-white text-black rounded-lg shadow-lg z-50">
+                                    <Link href="/write-review" className="block px-4 py-3 hover:bg-gray-200">Write a Review</Link>
+                                    <Link href="/post-photo" className="block px-4 py-3 hover:bg-gray-200">Post a Photo</Link>
+                                    <Link href="/add-place" className="block px-4 py-3 hover:bg-gray-200">Add a Place</Link>
+                                </div>
+                            )}
+                        </div>
                         <Link href="/community" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#33e0a1] duration-200">Community</Link>
                     </div>
                 </motion.div>
