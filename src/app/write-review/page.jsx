@@ -11,10 +11,10 @@ const allowedCategories = ["Business", "Couples", "Family", "Friends", "Solo", "
 const groupOptions = ["Business", "Couples", "Family", "Friends", "Solo"];
 
 const ReviewUI = () => {
-    const [userInput, setUserInput] = useState("");
+    // const [userInput, setUserInput] = useState("");
     const [filteredOptions, setFilteredOptions] = useState([]);
     // const [review, setReview] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState("");
+    // const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [reviewText, setReviewText] = useState("");
     const [titleText, setTitleText] = useState("");
@@ -23,6 +23,9 @@ const ReviewUI = () => {
     const [loading, setLoading] = useState(false);
     const [imageLoading, setImageLoading] = useState(false);
     const [user, setUser] = useState(null);
+    const [showReviewForm, setShowReviewForm] = useState(false);
+    const [userInput, setUserInput] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -60,19 +63,14 @@ const ReviewUI = () => {
 
 
 
-
-    const handleInputChange = (e) => {
-        const value = e.target.value;
-        setUserInput(value);
-
-        if (value) {
-            const matches = allowedCategories.filter((cat) =>
-                cat.toLowerCase().includes(value.toLowerCase())
-            );
-            setFilteredOptions(matches);
-        } else {
-            setFilteredOptions([]);
+    const handleNextClick = () => {
+        if (!selectedCategory) {
+            setSelectedCategory(userInput); // Use user input if no category is selected
         }
+        setShowReviewForm(true);
+    };
+    const handleInputChange = (e) => {
+        setUserInput(e.target.value);
     };
 
     const handleSelectCategory = (category) => {
@@ -211,24 +209,18 @@ const ReviewUI = () => {
                             placeholder="What would you like to review?"
                             className="w-full px-4 py-3 border border-[#FFD9C4] rounded-lg text-gray-300 outline-none"
                         />
-                        {filteredOptions.length > 0 && (
-                            <ul className="absolute w-full bg-white border border-gray-300 mt-1 rounded-lg shadow-md text-black">
-                                {filteredOptions.map((option) => (
-                                    <li
-                                        key={option}
-                                        onClick={() => handleSelectCategory(option)}
-                                        className="p-2 cursor-pointer hover:bg-gray-200"
-                                    >
-                                        {option}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
                     </div>
-
+                    {userInput && (
+                        <button
+                            onClick={handleNextClick}
+                            className="bg-[#33e0a1] text-white px-6 py-3 mt-4 rounded-lg font-semibold hover:bg-gray-800 transition"
+                        >
+                            Next
+                        </button>
+                    )}
                 </>
             ) : (
-                <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 justify-center md:mt-12 mt-[30rem] px-4 lg:px-0">
+                <div className="flex flex-col lg:flex-row lg:gap-16 justify-center md:mt-12 mt-[20rem] px-4 lg:px-0">
                     <div className="text-[#FFD9C4] text-center lg:text-left">
                         <h2 className="text-2xl lg:text-4xl font-semibold mb-4">
                             How was your experience ({selectedCategory})?
