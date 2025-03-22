@@ -17,14 +17,14 @@ const Page = () => {
     const [activeSection, setActiveSection] = useState(sections[0]);
 
     return (
-        <div className="flex flex-col justify-center items-center w-full px-6 md:mt-12  lg:px-12 py-8">
+        <div className="flex flex-col justify-center items-center w-full px-6 md:mt-12 lg:px-12 py-8">
             {/* Title */}
-            <h1 className="font-black text-[#D0D0D0] mb-8 text-3xl sm:text-4xl lg:text-5xl text-center">
+            <h1 className="font-black text-[#D0D0D0] mb-8 text-3xl sm:text-4xl lg:tex t-5xl text-center">
                 {activeSection.heading}
             </h1>
 
             {/* Navigation Buttons (Horizontal Scroll on Mobile) */}
-            <div className="flex flex-nowrap overflow-x-auto justify-start items-center gap-4 w-full max-w-full pb-3 scrollbar-hide">
+            <div className="flex flex-nowrap overflow-x-auto justify-start md:justify-center items-center gap-4 w-full max-w-full pb-3 scrollbar-hide">
                 {sections.map((section) => (
                     <button
                         key={section.name}
@@ -72,9 +72,11 @@ const Page = () => {
                     <p className="text-md sm:text-lg max-w-lg text-black/70 mt-2 mb-4">
                         New in town? No worries! LocaVibe helps you uncover the best local spots—from cozy cafés to budget-friendly shopping and hidden gems around campus.
                     </p>
-                    <button className="text-white rounded-lg w-fit text-lg py-2 cursor-pointer bg-black font-semibold duration-200 px-6">
-                        Find your Vibe.
-                    </button>
+                    <Link href='/discover'>
+                        <button className="text-white rounded-lg w-fit text-lg py-2 cursor-pointer bg-black font-semibold duration-200 px-6">
+                            Find your Vibe.
+                        </button>
+                    </Link>
                 </div>
 
                 {/* Hidden Image for Mobile */}
