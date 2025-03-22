@@ -27,7 +27,7 @@ const Home = () => {
         <div className='w-[60%]'>
           <Navbar />
           {/* <Header /> */}
-          {/* <Sections /> */}
+          <Sections />
           {/* <Header /> */}
           <Why />
         </div>
