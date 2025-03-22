@@ -129,9 +129,9 @@ const Navbar = () => {
                             <h2 className="hover:opacity-70 duration-200 cursor-pointer" onClick={() => setIsReviewDropdownOpen(!isReviewDropdownOpen)}>Review</h2>
                             {isReviewDropdownOpen && (
                                 <div className="absolute left-0 mt-2 text-sm font-semibold w-40 bg-white text-black rounded-lg shadow-lg z-50">
-                                    <Link href="/write-review" className="block px-4 py-3 hover:bg-gray-200">Write a Review</Link>
-                                    <Link href="/post-photo" className="block px-4 py-3 hover:bg-gray-200">Post a Photo</Link>
-                                    <Link href="/add-place" className="block px-4 py-3 hover:bg-gray-200">Add a Place</Link>
+                                    <Link href="/write-review" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-3  hover:bg-gray-200">Write a Review</Link>
+                                    <Link href="/post-photo" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-3 hover:bg-gray-200">Post a Photo</Link>
+                                    <Link href="/add-place" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-3 hover:bg-gray-200">Add a Place</Link>
                                 </div>
                             )}
                         </div>

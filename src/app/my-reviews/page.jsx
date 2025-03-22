@@ -71,7 +71,7 @@ const page = () => {
     return (
         <>
             <div className="flex justify-center w-full items-center px-4 sm:px-8">
-                <div className="relative w-full max-w-screen-xl mt-32">
+                <div className="relative w-full max-w-screen-xl mt-5 md:mt-32">
                     <h1 className="text-3xl text-white ">Your Reviews</h1>
                     {loading ? (
                         <p className="text-gray-400 ">Loading reviews...</p> // Show loading text
