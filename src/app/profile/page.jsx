@@ -85,7 +85,7 @@ const ProfilePage = () => {
     if (loading) {
 
         return (
-            <div className="flex justify-center flex-col items-center h-screen bg-[#121b22]/10">
+            <div className="flex justify-center flex-col items-center h-[85vh] bg-[#121b22]/10">
                 <img
                     className=" select-none md:w-auto w-72"
 
@@ -100,7 +100,7 @@ const ProfilePage = () => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+        <div className="flex flex-col items-center justify-center min-h-[85vh] bg-gray-900 text-white p-4">
             <motion.div
                 className="bg-gray-800 p-4 rounded-lg shadow-xl w-full max-w-xs text-center"
                 initial={{ opacity: 0, y: -20 }}
