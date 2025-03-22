@@ -17,14 +17,14 @@ const Page = () => {
     const [activeSection, setActiveSection] = useState(sections[0]);
 
     return (
-        <div className="flex flex-col justify-center items-center w-full px-6 md:mt-12 mt-28 lg:px-12 py-8">
+        <div className="flex flex-col justify-center items-center w-full px-6 md:mt-12 mt-6 lg:px-12 py-8">
             {/* Title */}
             <h1 className="font-black text-[#D0D0D0] mb-8 text-3xl sm:text-4xl lg:text-5xl text-center">
                 {activeSection.heading}
             </h1>
 
             {/* Navigation Buttons (Horizontal Scroll on Mobile) */}
-            <div className="flex flex-nowrap overflow-x-scroll justify-center items-center gap-4 w-full max-w-full pb-3 scrollbar-hide">
+            <div className="flex flex-nowrap overflow-x-auto justify-start items-center gap-4 w-full max-w-full pb-3 scrollbar-hide">
                 {sections.map((section) => (
                     <button
                         key={section.name}
@@ -39,13 +39,14 @@ const Page = () => {
 
 
 
+
             {/* Search Bar */}
             <Link href="/discover">
-                <div className="flex mt-6 items-center w-full max-w-full border border-white rounded-full shadow-md px-4 py-1">
+                <div className="flex mt-6 items-center w-full max-w-full border border-white pl-4 rounded-full shadow-md md:px-4 px-1 py-1">
                     <input
                         type="text"
                         placeholder={activeSection.placeholder}
-                        className="flex-grow outline-none text-[#D0D0D0] md:w-[60rem] text-sm sm:text-lg placeholder:text-[#D0D0D0] bg-transparent p-2 md:p-3"
+                        className="flex-grow outline-none text-[#D0D0D0] md:w-[60rem]  text-sm sm:text-lg placeholder:text-[#D0D0D0] bg-transparent p-2 md:p-3"
                     />
                     <button className="bg-green-400 cursor-pointer text-black font-semibold px-6 py-3 rounded-br-full rounded-tr-full rounded-bl-xl rounded-tl-xl">
                         Search
