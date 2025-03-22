@@ -45,3 +45,7 @@ body {
       transparent 1px);
   animation: grid-flow 20s linear infinite;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

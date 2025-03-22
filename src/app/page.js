@@ -24,9 +24,9 @@ const Home = () => {
   return (
     <>
       <div className='w-full flex justify-center items-center '>
-        <div className='w-[60%]'>
+        <div className='w-full md:w-[60%]'>
           <Navbar />
-          {/* <Header /> */}
+          <Header />
           <Sections />
           {/* <Header /> */}
           <Why />
