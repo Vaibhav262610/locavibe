@@ -194,7 +194,7 @@ const ReviewUI = () => {
     };
 
     return (
-        <div className="flex h-screen  justify-center flex-col  items-center p-8 min-h-screen">
+        <div className="flex h-[85vh] justify-center flex-col  items-center p-8 min-h-[85vh]">
             {!selectedCategory ? (
                 <>
                     <h1 className="text-3xl sm:text-4xl md:text-5xl text-[#FFD9C4] font-bold text-center">
@@ -228,7 +228,7 @@ const ReviewUI = () => {
 
                 </>
             ) : (
-                <div className="flex  flex-col lg:flex-row gap-10 lg:gap-16 justify-center mt-[40rem] px-4 lg:px-0">
+                <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 justify-center md:mt-12 mt-[30rem] px-4 lg:px-0">
                     <div className="text-[#FFD9C4] text-center lg:text-left">
                         <h2 className="text-2xl lg:text-4xl font-semibold mb-4">
                             How was your experience ({selectedCategory})?

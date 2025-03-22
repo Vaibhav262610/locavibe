@@ -40,9 +40,9 @@ const Page = () => {
     };
 
     return (
-        <div className="min-h-screen flex justify-center items-center px-3 bg-gray-900">
-            <div className="w-full max-w-xs bg-white/10 backdrop-blur-lg p-5 rounded-lg shadow-lg border border-white/20">
-                <h2 className="text-xl font-semibold text-center mb-3 text-white">Sign Up 🚀</h2>
+        <div className="min-h-[85vh] flex justify-center items-center  px-3 bg-gray-900">
+            <div className="w-full md:max-w-sm max-w-xs bg-white/10  backdrop-blur-lg p-5 rounded-lg shadow-lg border border-white/20">
+                <h2 className="md:text-2xl text-xl font-semibold text-center mb-3 text-white">Sign Up 🚀</h2>
                 <form onSubmit={handleSubmit} className="space-y-3">
                     {[{ label: "Username", value: username, setValue: setUsername },
                     { label: "Email", value: email, setValue: setEmail, type: "email" },
@@ -50,15 +50,15 @@ const Page = () => {
                     { label: "Confirm Password", value: confirmPassword, setValue: setConfirmPassword, type: "password" }]
                         .map(({ label, value, setValue, type = "text" }, i) => (
                             <div key={i}>
-                                <label className="block text-xs font-medium text-gray-300">{label}</label>
-                                <input type={type} className="w-full p-2 bg-gray-800/50 text-white rounded border border-gray-600 focus:ring-2 focus:ring-teal-500 outline-none" value={value} onChange={(e) => setValue(e.target.value)} required />
+                                <label className="block md:text-md text-xs font-medium text-gray-300">{label}</label>
+                                <input type={type} className="w-full p-3 bg-gray-800/50 text-white rounded border border-gray-600 focus:ring-2 focus:ring-teal-500 outline-none" value={value} onChange={(e) => setValue(e.target.value)} required />
                             </div>
                         ))}
-                    <button type="submit" className={`w-full py-2 rounded text-white font-semibold flex justify-center transition-all ${loading ? "bg-gray-500 cursor-not-allowed" : "bg-teal-500 hover:bg-teal-600"}`} disabled={loading}>
+                    <button type="submit" className={`w-full md:text-md md:py-3 py-2 rounded text-white font-semibold flex justify-center transition-all ${loading ? "bg-gray-500 cursor-not-allowed" : "bg-teal-500 hover:bg-teal-600"}`} disabled={loading}>
                         {loading ? "Creating..." : "Sign Up"}
                     </button>
                 </form>
-                <p className="text-xs text-gray-400 text-center mt-2">
+                <p className=" text-xs text-gray-400 text-center mt-2">
                     Already have an account? <a href="/login" className="text-teal-400 hover:text-teal-500">Log in</a>
                 </p>
             </div>

@@ -17,14 +17,14 @@ const Page = () => {
     const [activeSection, setActiveSection] = useState(sections[0]);
 
     return (
-        <div className="flex flex-col justify-center items-center w-full px-6 mt-28 lg:px-12 py-8">
+        <div className="flex flex-col justify-center items-center w-full px-6 md:mt-12 mt-28 lg:px-12 py-8">
             {/* Title */}
             <h1 className="font-black text-[#D0D0D0] mb-8 text-3xl sm:text-4xl lg:text-5xl text-center">
                 {activeSection.heading}
             </h1>
 
             {/* Navigation Buttons (Horizontal Scroll on Mobile) */}
-            <div className="flex flex-nowrap overflow-x-scroll gap-4 w-full max-w-full pb-3 scrollbar-hide">
+            <div className="flex flex-nowrap overflow-x-scroll justify-center items-center gap-4 w-full max-w-full pb-3 scrollbar-hide">
                 {sections.map((section) => (
                     <button
                         key={section.name}
@@ -41,11 +41,11 @@ const Page = () => {
 
             {/* Search Bar */}
             <Link href="/discover">
-                <div className="flex mt-6 items-center w-full max-w-full border border-white rounded-full shadow-md px-4 py-2">
+                <div className="flex mt-6 items-center w-full max-w-full border border-white rounded-full shadow-md px-4 py-1">
                     <input
                         type="text"
                         placeholder={activeSection.placeholder}
-                        className="flex-grow outline-none text-[#D0D0D0] text-sm sm:text-lg placeholder:text-[#D0D0D0] bg-transparent p-2 md:p-3"
+                        className="flex-grow outline-none text-[#D0D0D0] md:w-[60rem] text-sm sm:text-lg placeholder:text-[#D0D0D0] bg-transparent p-2 md:p-3"
                     />
                     <button className="bg-green-400 cursor-pointer text-black font-semibold px-6 py-3 rounded-br-full rounded-tr-full rounded-bl-xl rounded-tl-xl">
                         Search
@@ -54,9 +54,16 @@ const Page = () => {
             </Link>
 
             {/* Travel Inspiration Section without Image on Mobile */}
-            <div className="mt-12 w-full flex flex-col lg:flex-row bg-[#33e0a1] py-8 rounded-lg items-center text-center lg:text-left">
+            <div className="mt-12 w-full flex flex-col lg:flex-row bg-[#33e0a1] py-8 rounded-lg items-center justify-around  lg:text-left">
                 {/* Content Section */}
-                <div className="p-4 flex flex-col items-center lg:items-start w-full">
+                <div className="hidden lg:block">
+                    <img
+                        src="/image.png"
+                        alt="Travel Inspiration"
+                        className=" rounded-md w-md"
+                    />
+                </div>
+                <div className="p-4 flex flex-col items-center lg:items-start  w-fit">
                     <h1 className="text-xs text-black/50 mb-2">Made by Vaibhav Rajpoot 💖</h1>
                     <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-3 max-w-lg">
                         Find Your Vibe, Explore Your City
@@ -70,13 +77,7 @@ const Page = () => {
                 </div>
 
                 {/* Hidden Image for Mobile */}
-                <div className="hidden lg:block">
-                    <img
-                        src="https://media-cdn.tripadvisor.com/media/photo-o/2e/d9/f1/88/caption.jpg?w=1200&h=-1"
-                        alt="Travel Inspiration"
-                        className="w-full lg:w-1/2 h-64 object-cover object-center rounded-md"
-                    />
-                </div>
+
             </div>
         </div>
     );

@@ -16,7 +16,7 @@ const Loader = () => {
     const dots = '.'.repeat(dotCount);
 
     return (
-        <div className="flex justify-center flex-col items-center h-screen bg-[#121b22]/10">
+        <div className="flex justify-center flex-col items-center h-[85vh] bg-[#121b22]/10">
             <img
                 className=" select-none md:w-auto w-72"
 

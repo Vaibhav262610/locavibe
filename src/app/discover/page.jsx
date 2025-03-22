@@ -38,8 +38,8 @@ const Page = () => {
 
     return (
         <>
-            <div className="mt-20 px-4 sm:px-6 md:px-12">
-                <h1 className="text-center text-white text-3xl font-black py-8">Discover your Vibe</h1>
+            <div className="md:mt-8 mt-20 px-4 sm:px-6 md:px-1">
+                {/* <h1 className="text-center text-white md:text-5xl text-3xl font-black py-8">Discover your Vibe</h1> */}
                 {/* Google Map */}
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d54872.0604246069!2d76.7295140993382!3d30.732347721742805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fed0be66ec96b%3A0xa5ff67f9527319fe!2sChandigarh!5e0!3m2!1sen!2sin!4v1741619504180!5m2!1sen!2sin"
@@ -66,13 +66,13 @@ const Page = () => {
                         )}
                     </div>
 
-                    <div className="flex items-center w-full sm:w-[70%] border border-white pl-4 rounded-full shadow-md py-3">
+                    <div className="flex items-center w-full md:w-[50%] border border-white pl-4 rounded-full shadow-md py-3">
                         <input
                             type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="Search your vibe..."
-                            className="w-full outline-none text-[#D0D0D0] text-sm placeholder:text-[#D0D0D0] bg-transparent"
+                            className=" w-full outline-none text-[#D0D0D0] text-sm placeholder:text-[#D0D0D0] bg-transparent"
                         />
                     </div>
                 </div>

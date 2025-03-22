@@ -47,7 +47,7 @@ const Page = () => {
     };
 
     return (
-        <div className="relative min-h-screen flex justify-center items-center px-3 sm:px-5 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+        <div className="relative min-h-[85vh] flex justify-center items-center px-3 sm:px-5 ">
             {/* Glassmorphism Card */}
             <div className="relative z-10 w-full max-w-xs sm:max-w-sm bg-white/10 backdrop-blur-lg p-5 sm:p-6 rounded-lg sm:rounded-xl shadow-lg border border-white/20">
                 <h2 className="text-xl sm:text-2xl font-semibold text-center mb-3 sm:mb-5 text-white">
