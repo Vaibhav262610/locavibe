@@ -38,7 +38,7 @@ const Page = () => {
 
     return (
         <>
-            <div className="md:mt-8 mt-20 px-4 sm:px-6 md:px-1">
+            <div className="md:mt-8 px-4 sm:px-6 md:px-1">
                 {/* <h1 className="text-center text-white md:text-5xl text-3xl font-black py-8">Discover your Vibe</h1> */}
                 {/* Google Map */}
                 <iframe

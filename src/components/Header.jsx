@@ -17,7 +17,7 @@ const Page = () => {
     const [activeSection, setActiveSection] = useState(sections[0]);
 
     return (
-        <div className="flex flex-col justify-center items-center w-full px-6 md:mt-12 mt-6 lg:px-12 py-8">
+        <div className="flex flex-col justify-center items-center w-full px-6 md:mt-12  lg:px-12 py-8">
             {/* Title */}
             <h1 className="font-black text-[#D0D0D0] mb-8 text-3xl sm:text-4xl lg:text-5xl text-center">
                 {activeSection.heading}
