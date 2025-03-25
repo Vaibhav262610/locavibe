@@ -59,7 +59,7 @@ const Page = () => {
                     </button>
                 </form>
                 <p className=" text-xs text-gray-400 text-center mt-2">
-                    Already have an account? <a href="/login" className="text-teal-400 hover:text-teal-500">Log in</a>
+                    Already have an account?<a href="/login" className="text-teal-400 hover:text-teal-500">Log in</a>
                 </p>
             </div>
             <ToastContainer />
