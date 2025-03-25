@@ -32,7 +32,7 @@ export default function WhyLocavibe() {
     ];
 
     return (
-        <div className="min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6 lg:px-12 py-20 bg-[#121b22]">
+        <div className="min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6 lg:px-12 py-20 ">
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
