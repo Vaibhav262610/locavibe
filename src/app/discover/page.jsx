@@ -10,10 +10,80 @@ const Page = () => {
     const [restaurants, setRestaurants] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [user, setUser] = useState()
+
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
+    const profileId = "vaibhav"
+    const reviewId = "rajpoot"
+    const saved = {
+        profileId: user.data._id,
+        reviewId: reviewId
+    }
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = localStorage.getItem("authToken");
+                if (!token) {
+                    router.push("/login");
+                    return;
+                }
+
+                const response = await fetch("/api/users/profile", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error("Invalid or expired token");
+                }
+
+                const data = await response.json();
+                setUser(data);
+
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []); // Empty dependency array ensures this runs once
+
+    // console.log("updated user", user.data._id);
+
+    useEffect(() => {
+        async function saveReview() {
+            try {
+                const response = await fetch("/api/review/save-review", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(saved),
+                });
+
+                if (!response.ok) {
+                    const errorResponse = await response.json();
+                    console.error("Error submitting review:", errorResponse.message || errorResponse.error);
+                    return;
+                }
+
+            }
+            catch {
+                console.log("error in saving review", error);
+
+            }
+        }
+    })
+
 
     useEffect(() => {
         async function fetchRestaurants() {
