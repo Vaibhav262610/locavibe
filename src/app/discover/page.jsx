@@ -97,7 +97,7 @@ const Page = () => {
                                     <div className="w-full md:w-[60%] flex flex-col gap-3">
                                         <div className="flex w-full justify-between items-start">
                                             <h2 className="text-2xl sm:text-3xl font-bold">{restaurant.name}</h2>
-                                            <button className="text-gray-500 hover:text-red-500">
+                                            <button className="text-gray-500 hover:text-red-500 cursor-pointer">
                                                 <FaHeart size={24} />
                                             </button>
                                         </div>
@@ -130,7 +130,7 @@ const Page = () => {
                                 </div>
                             ))
                         ) : (
-                            <p className="text-center text-gray-500">No restaurants found.</p>
+                            <p className="text-center text-gray-500">Loading...</p>
                         )}
                     </div>
                 </div>

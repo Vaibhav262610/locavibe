@@ -130,7 +130,7 @@ const Page = () => {
                         ))}
                     </div>
                 ) : (
-                    <p className="text-gray-400 text-center">No reviews available.</p>
+                    <p className="text-gray-400 text-center">Login First.</p>
                 )}
             </div>
         </div>
