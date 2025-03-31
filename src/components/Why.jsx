@@ -89,7 +89,7 @@ export default function WhyLocavibe() {
 
                             <div className="mt-auto pt-3 sm:pt-4">
                                 <button className="w-full flex justify-between items-center py-2 sm:py-3 px-4 sm:px-5 rounded-lg text-sm sm:text-lg text-slate-300 hover:text-teal-300 hover:bg-[#0c151b]/70 transition-colors">
-                                    Learn more <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+                                    Learn  more <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
                                 </button>
                             </div>
                         </div>
