@@ -70,7 +70,7 @@ const Page = () => {
                         Find Your Vibe, Explore Your City
                     </h2>
                     <p className="text-md sm:text-lg max-w-lg text-black/70 mt-2 mb-4">
-                        New in town? No worries! LocaVibe helps you uncover the best local spots—from cozy cafés to budget-friendly shopping and hidden gems around campus.
+                        New in town?  No worries! LocaVibe helps you uncover the best local spots—from cozy cafés to budget-friendly shopping and hidden gems around campus.
                     </p>
                     <Link href='/discover'>
                         <button className="text-white rounded-lg w-fit text-lg py-2 cursor-pointer bg-black font-semibold duration-200 px-6">
