@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { FaStar, FaHeart } from "react-icons/fa";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { IoMdPricetag } from "react-icons/io";
+import withAuth from "@/lib/withAuth";
 
 const Page = () => {
     const [restaurants, setRestaurants] = useState([]);
@@ -16,12 +17,12 @@ const Page = () => {
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
-    const profileId = "vaibhav"
-    const reviewId = "rajpoot"
-    const saved = {
-        profileId: user.data._id,
-        reviewId: reviewId
-    }
+    // const profileId = "vaibhav"
+    // const reviewId = "rajpoot"
+    // const saved = {
+    //     profileId: user.data._id,
+    //     reviewId: reviewId
+    // }
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -58,31 +59,31 @@ const Page = () => {
 
     // console.log("updated user", user.data._id);
 
-    useEffect(() => {
-        async function saveReview() {
-            try {
-                const response = await fetch("/api/review/save-review", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(saved),
-                });
+    // useEffect(() => {
+    //     async function saveReview() {
+    //         try {
+    //             const response = await fetch("/api/review/save-review", {
+    //                 method: "POST",
+    //                 headers: {
+    //                     "Authorization": `Bearer ${token}`,
+    //                     "Content-Type": "application/json",
+    //                 },
+    //                 body: JSON.stringify(saved),
+    //             });
 
-                if (!response.ok) {
-                    const errorResponse = await response.json();
-                    console.error("Error submitting review:", errorResponse.message || errorResponse.error);
-                    return;
-                }
+    //             if (!response.ok) {
+    //                 const errorResponse = await response.json();
+    //                 console.error("Error submitting review:", errorResponse.message || errorResponse.error);
+    //                 return;
+    //             }
 
-            }
-            catch {
-                console.log("error in saving review", error);
+    //         }
+    //         catch {
+    //             console.log("error in saving review", error);
 
-            }
-        }
-    })
+    //         }
+    //     }
+    // })
 
 
     useEffect(() => {
@@ -209,4 +210,4 @@ const Page = () => {
     );
 };
 
-export default Page;
+export default withAuth(Page);

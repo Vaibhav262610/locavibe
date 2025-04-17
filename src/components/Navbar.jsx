@@ -55,7 +55,6 @@ const Navbar = () => {
                 {/* Desktop Navigation */}
                 <div className="hidden xl:flex text-[#D0D0D0] text-lg gap-8 lg:gap-10">
                     <Link href="/discover"><h2 className="hover:opacity-70 duration-200 cursor-pointer">Discover</h2></Link>
-                    <h2 className="hover:opacity-70 duration-200 cursor-pointer">Trips</h2>
                     <div className="relative" ref={reviewDropdownRef}>
                         <h2 className="hover:opacity-70 duration-200 cursor-pointer" onClick={() => setIsReviewDropdownOpen(!isReviewDropdownOpen)}>Review</h2>
                         {isReviewDropdownOpen && (
