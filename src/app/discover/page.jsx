@@ -1,25 +1,26 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { ChevronDown ,ChevronLeft, ChevronRight} from "lucide-react";
 import { FaStar, FaHeart } from "react-icons/fa";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { IoMdPricetag } from "react-icons/io";
 import withAuth from "@/lib/withAuth";
-import { FaCamera, FaUtensils, FaShoppingCart , FaClinicMedical  } from "react-icons/fa";
+import { FaCamera, FaUtensils, FaShoppingCart, FaClinicMedical } from "react-icons/fa";
 import { FaStreetView } from "react-icons/fa6"
-import { MdElectricBolt  } from "react-icons/md"
+import { MdElectricBolt } from "react-icons/md"
 import Navbar from "@/components/Navbar";
+
 
 
 const sections = [
     { name: "All", icon: "🏠", heading: "Where to?", placeholder: "Places to go, things to do, hotels..." },
-    { name: "Street Food", icon: <FaStreetView  />, heading: "Find Hotels", placeholder: "Search for hotels..." },
+    { name: "Street Food", icon: <FaStreetView />, heading: "Find Hotels", placeholder: "Search for hotels..." },
     { name: "Places to Visit", icon: <FaCamera />, heading: "Discover Activities", placeholder: "Find attractions, tours..." },
     { name: "Restaurants", icon: <FaUtensils />, heading: "Explore Restaurants", placeholder: "Search for restaurants..." },
-    { name: "Shopping", icon: <FaShoppingCart  />, heading: "Find the best clothes", placeholder: "Search for flights..." },
-    { name: "Electronics", icon: <MdElectricBolt  />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes..." },
-    { name: "Medical", icon: <FaClinicMedical  />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes..." },
+    { name: "Shopping", icon: <FaShoppingCart />, heading: "Find the best clothes", placeholder: "Search for flights..." },
+    { name: "Electronics", icon: <MdElectricBolt />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes..." },
+    { name: "Medical", icon: <FaClinicMedical />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes..." },
 ];
 
 const Page = () => {
@@ -30,6 +31,17 @@ const Page = () => {
     const [loading, setLoading] = useState(true);
     const [activeSection, setActiveSection] = useState(sections[0]);
 
+
+    const scrollRef = useRef(null);
+
+    const scroll = (direction) => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({
+                left: direction === "left" ? -150 : 150,
+                behavior: "smooth",
+            });
+        }
+    };
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
@@ -125,12 +137,11 @@ const Page = () => {
 
     return (
         <>
-            <div className="w-full flex justify-center items-center px-4 sm:px-6">
-                <div className="bg-red-50 w-full md:w-[65%]">
+             <div className="w-full flex justify-center items-center">
+                <div className="w-full md:w-[65%]">
                     <Navbar />
-              </div>
+                </div>
             </div>
-
             <div className="md:mt-8 px-4 sm:px-6 md:px-1">
                 {/* <h1 className="text-center text-white md:text-5xl text-3xl font-black py-8">Discover your Vibe</h1> */}
                 {/* Google Map */}
@@ -146,43 +157,73 @@ const Page = () => {
                 {/* Search & Dropdown */}
                 <div>
 
-                <div className="flex flex-col sm:flex-row gap-4 text-[#FFD9C4] mt-8 w-full items-center justify-center">
-                    <div className="relative w-full sm:w-auto">
-                        <button
-                            onClick={toggleDropdown}
-                            className="border border-white rounded-full px-6 py-3 flex items-center justify-center w-full sm:w-auto"
+                    <div className="flex flex-col sm:flex-row gap-4 text-[#FFD9C4] mt-8 w-full items-center justify-center">
+                        <div className="relative w-full sm:w-auto">
+                            <button
+                                onClick={toggleDropdown}
+                                className="border border-white rounded-full px-6 py-3 flex items-center justify-center w-full sm:w-auto"
                             >
-                            Chandigarh <ChevronDown className="ml-1" size={16} />
-                        </button>
-                        {isDropdownOpen && (
-                            <ul className="absolute left-0 mt-2 w-full sm:w-auto border rounded-md shadow-lg bg-white text-black cursor-pointer duration-200 z-10">
-                                <li className="px-4 py-2 hover:bg-gray-100">More Places Coming Soon!</li>
-                            </ul>
-                        )}
-                    </div>
+                                Chandigarh <ChevronDown className="ml-1" size={16} />
+                            </button>
+                            {isDropdownOpen && (
+                                <ul className="absolute left-0 mt-2 w-full sm:w-auto border rounded-md shadow-lg bg-white text-black cursor-pointer duration-200 z-10">
+                                    <li className="px-4 py-2 hover:bg-gray-100">More Places Coming Soon!</li>
+                                </ul>
+                            )}
+                        </div>
 
-                    <div className="flex items-center w-full md:w-[50%] border border-white pl-4 rounded-full shadow-md py-3">
-                        <input
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search your vibe..."
-                            className=" w-full outline-none text-[#D0D0D0] text-sm placeholder:text-[#D0D0D0] bg-transparent"
+                        <div className="flex items-center w-full md:w-[50%] border border-white pl-4 rounded-full shadow-md py-3">
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="Search your vibe..."
+                                className=" w-full outline-none text-[#D0D0D0] text-sm placeholder:text-[#D0D0D0] bg-transparent"
                             />
                         </div>
                     </div>
-                    <div className="flex mt-4 flex-nowrap overflow-x-auto justify-start md:justify-center items-center gap-4 w-full max-w-full scrollbar-hide">
+                    <div className="relative w-full">
+            {/* Fade overlays on left/right edges */}
+            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#121b22] to-transparent pointer-events-none z-10 md:hidden" />
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#121b22] to-transparent pointer-events-none z-10 md:hidden" />
+
+            {/* Left Arrow Button (Mobile Only) */}
+            <button
+                onClick={() => scroll("left")}
+                className="absolute left-2 top-1/2 -translate-y-1/2 p-1 bg-white/40 rounded-full shadow-sm z-20 md:hidden"
+            >
+                <ChevronLeft size={16} className="text-gray-700" />
+            </button>
+
+            {/* Scrollable Tabs */}
+            <div
+                ref={scrollRef}
+                className="flex mt-4 flex-nowrap overflow-x-auto justify-start md:justify-center items-center gap-4 w-full max-w-full scrollbar-hide px-10 md:px-0"
+            >
                 {sections.map((section) => (
                     <button
                         key={section.name}
                         onClick={() => setActiveSection(section)}
-                        className={`flex items-center cursor-pointer duration-200 space-x-2 text-sm sm:text-lg font-semibold px-4 py-2 whitespace-nowrap ${activeSection.name === section.name ? "text-[#FFD9C4] border-b-2" : "text-[#D0D0D0]"}`}
+                        className={`flex items-center cursor-pointer duration-200 space-x-2 text-sm sm:text-lg font-semibold lg:px-4 px-2 py-2 whitespace-nowrap ${
+                            activeSection.name === section.name
+                                ? "text-[#FFD9C4] border-b-2 border-[#FFD9C4]"
+                                : "text-[#D0D0D0]"
+                        }`}
                     >
                         <span>{section.icon}</span>
                         <span>{section.name}</span>
                     </button>
                 ))}
             </div>
+
+            {/* Right Arrow Button (Mobile Only) */}
+            <button
+                onClick={() => scroll("right")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 bg-white/40 rounded-full shadow-sm z-20 md:hidden"
+            >
+                <ChevronRight size={16} className="text-gray-700" />
+            </button>
+        </div>
                 </div>
 
                 {/* Restaurant List */}

@@ -13,6 +13,12 @@ export async function GET(request) {
                 { status: 400 }
             );
         }
+        const clearAuthCookies = () => {
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+          };
+        clearAuthCookies()          
+        localStorage.removeItem("authToken");
 
         // Clear the token by setting an expired cookie
         const response = NextResponse.json({

@@ -82,8 +82,7 @@ const Navbar = () => {
                                 <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-50">
                                     <Link href="/profile" className="block px-4 py-3 hover:bg-gray-200">View Profile</Link>
                                     <Link href="/my-reviews" className="block px-4 py-3 hover:bg-gray-200">My Reviews</Link>
-                                    <Link href="/saved" className="block px-4 py-3 hover:bg-gray-200">Saved</Link>
-                                    <Link href="/settings" className="block px-4 py-3 hover:bg-gray-200">Settings</Link>
+                                    {/* <Link href="/saved" className="block px-4 py-3 hover:bg-gray-200">Saved</Link> */}
                                     <button
                                         onClick={() => {
                                             Cookies.remove("token", { path: "/" });
@@ -122,10 +121,10 @@ const Navbar = () => {
 
                     {/* Menu Items */}
                     <div className="flex flex-col gap-8 text-3xl font-bold text-white text-center">
-                        <Link href="/discover" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#33e0a1] duration-200">Discover</Link>
-                        <h2 className="hover:text-[#33e0a1] duration-200 cursor-pointer">Trips</h2>
+                        <Link href="/discover" onClick={() => {setIsMobileMenuOpen(false) , setIsMobileMenuOpen(false)}} className="hover:text-[#33e0a1] duration-200">Discover</Link>
+                        {/* <h2 className="hover:text-[#33e0a1] duration-200 cursor-pointer">Trips</h2> */}
                         <div className="relative" ref={reviewDropdownRef}>
-                            <h2 className="hover:opacity-70 duration-200 cursor-pointer" onClick={() => setIsReviewDropdownOpen(!isReviewDropdownOpen)}>Review</h2>
+                            <h2 className="hover:opacity-70 duration-200 cursor-pointer" onClick={() =>setIsReviewDropdownOpen(!isReviewDropdownOpen)}>Review</h2>
                             {isReviewDropdownOpen && (
                                 <div className="absolute left-0 mt-2 text-sm font-semibold w-40 bg-white text-black rounded-lg shadow-lg z-50">
                                     <Link href="/write-review" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-3  hover:bg-gray-200">Write a Review</Link>
@@ -134,7 +133,7 @@ const Navbar = () => {
                                 </div>
                             )}
                         </div>
-                        <Link href="/community" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#33e0a1] duration-200">Community</Link>
+                        <Link href="/community" onClick={() => {setIsMobileMenuOpen(false) , setIsMobileMenuOpen(false)}} className="hover:text-[#33e0a1] duration-200">Community</Link>
                     </div>
                 </motion.div>
             )}

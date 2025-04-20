@@ -9,7 +9,7 @@ const page = () => {
     const [loading, setLoading] = useState(true);
     const [review, setReview] = useState([]);
     const [user, setUser] = useState(null);
-    const router = useRouter(); // Added useRouter for redirection
+    const router = useRouter();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -28,12 +28,10 @@ const page = () => {
                     },
                 });
 
-                if (!response.ok) {
-                    throw new Error("Invalid or expired token");
-                }
+                if (!response.ok) throw new Error("Invalid or expired token");
 
                 const data = await response.json();
-                setUser(data); // Set the user data from the response
+                setUser(data);
             } catch (error) {
                 console.error("Error fetching user data:", error);
             } finally {
@@ -42,7 +40,7 @@ const page = () => {
         };
 
         fetchUserData();
-    }, []); // Empty dependency array ensures this runs once
+    }, []);
 
     useEffect(() => {
         if (user) {
@@ -51,10 +49,9 @@ const page = () => {
                     const response = await fetch("/api/review/get-reviews");
                     if (response.ok) {
                         const data = await response.json();
-                        console.log("Fetched Reviews:", data); // Log the data
-
-                        // Filter reviews to only show those where username matches user.data.username
-                        const userReviews = data.filter((rev) => rev.username === user.data?.username);
+                        const userReviews = data.filter(
+                            (rev) => rev.username === user.data?.username
+                        );
                         setReview(userReviews);
                     } else {
                         console.error("Failed to fetch events:", response.status);
@@ -62,45 +59,55 @@ const page = () => {
                 } catch (error) {
                     console.error("Error fetching events:", error);
                 } finally {
-                    setLoading(false); // Stop loading after fetch
+                    setLoading(false);
                 }
             };
             fetchEvents();
         }
-    }, [user]); // Re-fetch reviews when user changes
+    }, [user]);
 
     return (
         <>
-        <Navbar />
+           <div className="w-full flex justify-center items-center">
+                <div className="w-full md:w-[65%]">
+                    <Navbar />
+                </div>
+            </div>
+
             <div className="flex justify-center w-full items-center px-4 sm:px-8">
                 <div className="relative w-full max-w-screen-xl mt-5 md:mt-32">
-                    <h1 className="text-3xl text-white ">Your Reviews</h1>
+                    <h1 className="text-4xl font-bold text-white mb-6 border-b border-white/10 pb-2">
+                        Your Reviews
+                    </h1>
+
                     {loading ? (
-                        <p className="text-gray-400 ">Loading reviews...</p> // Show loading text
+                        <p className="text-gray-400 animate-pulse">Loading reviews...</p>
                     ) : review.length > 0 ? (
-                        <div className="w-full flex flex-col gap-6 mt-12">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
                             {review.map((rev) => (
                                 <div
                                     key={rev._id}
-                                    className="bg-none shadow-lg flex-wrap flex flex-col gap-6 rounded-lg p-6 border border-white/10"
+                                    className="bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-md transition-all duration-300"
                                 >
-                                    <h2 className="text-2xl sm:text-4xl font-black text-[#FFD9C4]">{rev.title}</h2>
-                                    <p className="text-white text-lg sm:text-xl">
-                                        {rev.content} I went on a {rev.category.toLowerCase()} trip with{" "}
-                                        {rev.who.toLowerCase()} {rev.when.toLowerCase()}. I would rate this
-                                        experience {rev.rating} out of 5.
+                                    <h2 className="text-2xl font-semibold text-[#FFD9C4] mb-3">
+                                        {rev.title}
+                                    </h2>
+                                    <p className="text-white mb-4">
+                                        {rev.content} I went on a{" "}
+                                        <span className="italic text-[#B5F4E8]">{rev.category.toLowerCase()}</span> trip with{" "}
+                                        <span className="italic text-[#B5F4E8]">{rev.who.toLowerCase()}</span>{" "}
+                                        <span className="italic text-[#B5F4E8]">{rev.when.toLowerCase()}</span>. I would rate this
+                                        experience <strong>{rev.rating}/5</strong>.
                                     </p>
-                                    <div className="flex justify-between flex-wrap">
-                                        <h2 className="text-md font-thin text-[#33e0a1]">Reviewed by: {rev.username}</h2>
-                                        <h2 className="text-md font-thin text-[#33e0a1]">
-                                            Reviewed on {new Date(rev.createdAt).toLocaleDateString()}
-                                        </h2>
+                                    <div className="flex justify-between text-sm text-[#B0FFE4] font-light">
+                                        <p>Reviewed by: {rev.username}</p>
+                                        <p>{new Date(rev.createdAt).toLocaleDateString()}</p>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <p className="text-gray-400 ">No reviews available.</p>
+                        <p className="text-gray-400 mt-4">You haven’t written any reviews yet.</p>
                     )}
                 </div>
             </div>

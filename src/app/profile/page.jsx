@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { FaUserEdit } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { MdAdminPanelSettings } from "react-icons/md";
+import Navbar from "@/components/Navbar";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -101,6 +102,13 @@ const ProfilePage = () => {
   }
 
   return (
+    <>
+    <div className="w-full flex justify-center items-center">
+                <div className="w-full md:w-[65%]">
+                    <Navbar />
+                </div>
+            </div>
+
     <div className="bg-[#0d1117] text-white min-h-screen p-4 md:p-8">
       <div className="max-w-5xl mx-auto">
         {/* Top Profile Card */}
@@ -114,10 +122,10 @@ const ProfilePage = () => {
             <div className="flex items-center gap-2">
               {isEditing ? (
                 <input
-                  type="text"
-                  value={newUsername}
-                  onChange={(e) => setNewUsername(e.target.value)}
-                  className="border p-2 text-sm text-center rounded-md bg-gray-700 text-white focus:outline-none"
+                type="text"
+                value={newUsername}
+                onChange={(e) => setNewUsername(e.target.value)}
+                className="border p-2 text-sm text-center rounded-md bg-gray-700 text-white focus:outline-none"
                   onKeyDown={(e) => e.key === "Enter" && updateUsername()}
                 />
               ) : (
@@ -128,7 +136,7 @@ const ProfilePage = () => {
                   isEditing ? updateUsername() : setIsEditing(true)
                 }
                 className="p-2 bg-blue-600 rounded-full hover:bg-blue-700"
-              >
+                >
                 <FaUserEdit size={16} />
               </button>
               {isAdmin && (
@@ -150,7 +158,7 @@ const ProfilePage = () => {
               <button
                 onClick={() => router.push("/discover")}
                 className="bg-red-600 px-4 py-1 rounded hover:bg-red-700 flex items-center gap-1"
-              >
+                >
                 <FiLogOut size={16} />
                 Logout
               </button>
@@ -207,6 +215,7 @@ const ProfilePage = () => {
         </div>
       </div>
     </div>
+                </>
   );
 };
 

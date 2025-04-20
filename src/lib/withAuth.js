@@ -1,26 +1,25 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const withAuth = (WrappedComponent) => {
     return function AuthComponent(props) {
         const router = useRouter();
-
-        // Check for both 'token' and 'authToken' in localStorage
-        const token = typeof window !== "undefined"
-            ? localStorage.getItem("token") || localStorage.getItem("authToken")
-            : null;
+        const [isAuthenticated, setIsAuthenticated] = useState(false);
 
         useEffect(() => {
-            // If no token is found, redirect to the login page
+            const token = Cookies.get("authToken");
+
             if (!token) {
                 router.push("/login");
+            } else {
+                setIsAuthenticated(true);
             }
-        }, [token]);
+        }, []);
 
-        // Render the wrapped component if authenticated
-        return token ? <WrappedComponent {...props} /> : null;
+        return isAuthenticated ? <WrappedComponent {...props} /> : null;
     };
 };
 

@@ -192,6 +192,13 @@ const ReviewUI = () => {
     };
 
     return (
+        <>
+         <div className="w-full flex justify-center items-center">
+                <div className="w-full md:w-[65%]">
+                    <Navbar />
+                </div>
+            </div>
+
         <div className="flex h-[85vh] justify-center flex-col  items-center p-8 min-h-[85vh]">
             {!selectedCategory ? (
                 <>
@@ -208,12 +215,12 @@ const ReviewUI = () => {
                             onChange={handleInputChange}
                             placeholder="What would you like to review?"
                             className="w-full px-4 py-3 border border-[#FFD9C4] rounded-lg text-gray-300 outline-none"
-                        />
+                            />
                     </div>
                     {userInput && (
                         <button
-                            onClick={handleNextClick}
-                            className="bg-[#33e0a1] text-white px-6 py-3 mt-4 rounded-lg font-semibold hover:bg-gray-800 transition"
+                        onClick={handleNextClick}
+                        className="bg-[#33e0a1] text-white px-6 py-3 mt-4 rounded-lg font-semibold hover:bg-gray-800 transition"
                         >
                             Next
                         </button>
@@ -234,9 +241,9 @@ const ReviewUI = () => {
                         <div className="flex justify-center lg:justify-start space-x-2 mb-4">
                             {Array.from({ length: 5 }).map((_, index) => (
                                 <span
-                                    key={index}
-                                    onClick={() => handleStarClick(index)}
-                                    className={`text-3xl md:text-5xl cursor-pointer ${index < rating ? "text-yellow-500" : "text-gray-400"}`}
+                                key={index}
+                                onClick={() => handleStarClick(index)}
+                                className={`text-3xl md:text-5xl cursor-pointer ${index < rating ? "text-yellow-500" : "text-gray-400"}`}
                                 >
                                     ★
                                 </span>
@@ -249,7 +256,7 @@ const ReviewUI = () => {
                             value={selectedOption}
                             onChange={handleSelectChange}
                             className="w-full mt-2 p-3 border text-white bg-[#1d2b35] border-gray-500 rounded-lg"
-                        >
+                            >
                             <option>Select one</option>
                             <option>Last week</option>
                             <option>Last month</option>
@@ -261,9 +268,9 @@ const ReviewUI = () => {
                         <div className="flex flex-wrap gap-2 mt-2">
                             {groupOptions.map((group) => (
                                 <button
-                                    key={group}
-                                    onClick={() => setSelectedGroup(group)}
-                                    className={`px-4 py-2 border rounded-lg ${selectedGroup === group ? "bg-gray-800 text-white" : "border-gray-500 text-gray-300"}`}
+                                key={group}
+                                onClick={() => setSelectedGroup(group)}
+                                className={`px-4 py-2 border rounded-lg ${selectedGroup === group ? "bg-gray-800 text-white" : "border-gray-500 text-gray-300"}`}
                                 >
                                     {group}
                                 </button>
@@ -277,7 +284,7 @@ const ReviewUI = () => {
                             value={reviewText}
                             onChange={handleReviewChange}
                             className="w-full mt-2 p-3 border border-gray-500 bg-[#1d2b35] rounded-lg text-gray-300"
-                        />
+                            />
                         <p className="text-right text-gray-500 text-sm">
                             {reviewText.split(/\s+/).filter((word) => word.length > 0).length}/100 words
                         </p>
@@ -290,7 +297,7 @@ const ReviewUI = () => {
                             value={titleText}
                             onChange={handleTitleChange}
                             className="w-full mt-2 p-3 border border-gray-500 bg-[#1d2b35] rounded-lg text-gray-300"
-                        />
+                            />
                         <p className="text-right text-gray-500 text-sm">
                             {titleText.split(/\s+/).filter((word) => word.length > 0).length}/120 words
                         </p>
@@ -318,18 +325,19 @@ const ReviewUI = () => {
                             onClick={handleSubmit}
                             className="w-full mt-6 cursor-pointer bg-[#33e0a1] text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition"
                             disabled={loading}
-                        >
+                            >
                             {loading ? "Processing..." : "Continue"}
                         </button>
                     </div>
                 </div>
 
 
-            )
-            }
+)
+}
             <ToastContainer />
             {/* <ToastContainer /> */}
         </div >
+</>
     );
 };
 
