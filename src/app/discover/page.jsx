@@ -13,12 +13,12 @@ import Navbar from "@/components/Navbar";
 
 const sections = [
     { name: "All", icon: "🏠", heading: "Where to?", placeholder: "Places to go, things to do, hotels...", category: "" },
-    { name: "Street Food", icon: <FaStreetView />, heading: "Find Hotels", placeholder: "Search for hotels...", category: "spicy food" },
-    { name: "Places to Visit", icon: <FaCamera />, heading: "Discover Activities", placeholder: "Find attractions, tours...", category: "visit" },
-    { name: "Restaurants", icon: <FaUtensils />, heading: "Explore Restaurants", placeholder: "Search for restaurants...", category: "restaurant" },
-    { name: "Shopping", icon: <FaShoppingCart />, heading: "Find the best clothes", placeholder: "Search for flights...", category: "shopping" },
-    { name: "Electronics", icon: <MdElectricBolt />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes...", category: "electronics" },
-    { name: "Medical", icon: <FaClinicMedical />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes...", category: "medical" },
+    { name: "Street Food", icon: <FaStreetView />, heading: "Find Hotels", placeholder: "Search for hotels...", category: "Street Food" },
+    { name: "Places to Visit", icon: <FaCamera />, heading: "Discover Activities", placeholder: "Find attractions, tours...", category: "Places to Visit" },
+    { name: "Restaurants", icon: <FaUtensils />, heading: "Explore Restaurants", placeholder: "Search for restaurants...", category: "Restaurant" },
+    { name: "Shopping", icon: <FaShoppingCart />, heading: "Find the best clothes", placeholder: "Search for flights...", category: "Shopping" },
+    { name: "Electronics", icon: <MdElectricBolt />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes...", category: "Electronics" },
+    { name: "Medical", icon: <FaClinicMedical />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes...", category: "Medical" },
 ];
 
 const Page = () => {
@@ -93,28 +93,18 @@ const Page = () => {
     }, []);
 
     const filteredRestaurants = restaurants.filter((restaurant) => {
-        // 1. First check if restaurant exists and has categories
-        if (!restaurant?.category) return false; // Skip if no categories
-        
-        // 2. Search filter (checks name + description)
         const matchesSearch = searchQuery
-            ? restaurant.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              restaurant.description?.toLowerCase().includes(searchQuery.toLowerCase())
+            ? restaurant.description?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+              restaurant.name?.toLowerCase()?.includes(searchQuery.toLowerCase())
             : true;
         
-        // 3. Category filter - checks if active category is in restaurant's categories
         const matchesCategory = activeSection.name !== "All"
-            ? restaurant.category.some(
-                cat => cat.toLowerCase() === activeSection.category?.toLowerCase()
-              )
+            ? restaurant.description === activeSection.category
             : true;
         
         return matchesSearch && matchesCategory;
     });
 
-    
-    console.log("Active category:", activeSection.category);
-    console.log("First restaurant's categories:", restaurants[0]?.category);
     const savedReview = async (reviewId) => {
         const profileId = user?.data?._id;
         if (!profileId || savedReviews[reviewId]) return;
@@ -279,7 +269,7 @@ const Page = () => {
                                     ? "No results found for your search." 
                                     : activeSection.name === "All" 
                                         ? "Loading..." 
-                                        : `No ${activeSection.name} found.`}
+                                        : `!Please use search option, this option isn't working properly.`}
                             </p>
                         )}
                     </div>
