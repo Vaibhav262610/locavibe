@@ -1,4 +1,5 @@
 "use client";
+import Navbar from "@/components/Navbar";
 // import UploadImage from "@/components/UploadImage";
 import withAuth from "@/lib/withAuth";
 // import { CldImage } from "next-cloudinary";
