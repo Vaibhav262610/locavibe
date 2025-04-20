@@ -103,7 +103,7 @@ const ProfilePage = () => {
 
   return (
     <>
-    <div className="w-full flex justify-center items-center px-4 sm:px-6">
+    <div className="w-full flex justify-center items-center ">
                 <div className="bg-red-50 w-full md:w-[65%]">
                     <Navbar />
                 </div>
@@ -182,7 +182,7 @@ const ProfilePage = () => {
         {/* Stats */}
         <div className="mt-8">
           <h2 className="text-xl font-semibold border-b border-gray-700 pb-2 mb-4">
-            Stats
+            Stats - garbage data
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div className="bg-gray-800 p-4 rounded-lg">
