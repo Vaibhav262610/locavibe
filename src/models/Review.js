@@ -59,6 +59,7 @@ const reviewSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
+    
 });
 
 export default mongoose.models.Review || mongoose.model('Review', reviewSchema);

@@ -1,27 +1,38 @@
-import { connectDb } from "@/db/db"; // Assuming you have a utility function to connect to DB
-import Saved from "@/models/Saved"; // Import the Saved model
+import { connectDb } from "@/db/db";
+import Saved from "@/models/Saved";
+
+
 
 export async function POST(request) {
     try {
-
-        connectDb();
-
+        // Ensure the DB connection is established before continuing
+        await connectDb();
+        
+        
         const { profileId, reviewId } = await request.json();
+        console.log(profileId,reviewId);
 
         if (!profileId || !reviewId) {
-            return res.status(400).json({ error: "Profile ID and Review ID are not Found." });
+            return new Response(
+                JSON.stringify({ error: "Profile ID and Review ID are not Found." }),
+                { status: 400 }
+            );
         }
-        const saved = new Saved({
-            profileId,
-            reviewId
-        })
 
-        await saved.save()
+        // Save the data to the database
+        const saved = new Saved({ profileId, reviewId });
+        await saved.save();  // Ensure that save is awaited
 
-        return res.status(200).json({ success: true, message: "Saved successfully!" });
+        return new Response(
+            JSON.stringify({ success: true, message: "Saved successfully!" }),
+            { status: 200 }
+        );
+
     } catch (error) {
         console.error("Error saving review:", error);
-        return res.status(500).json({ error: "Error saving review." });
-
+        return new Response(
+            JSON.stringify({ error: "Error saving review." }),
+            { status: 500 }
+        );
     }
 }

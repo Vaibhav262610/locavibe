@@ -30,6 +30,7 @@ const Page = () => {
     const [user, setUser] = useState()
     const [loading, setLoading] = useState(true);
     const [activeSection, setActiveSection] = useState(sections[0]);
+    const [saved , setSaved] = useState(false)
 
 
     const scrollRef = useRef(null);
@@ -45,12 +46,7 @@ const Page = () => {
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
-    // const profileId = "vaibhav"
-    // const reviewId = "rajpoot"
-    // const saved = {
-    //     profileId: user.data._id,
-    //     reviewId: reviewId
-    // }
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -85,35 +81,6 @@ const Page = () => {
         fetchUserData();
     }, []); // Empty dependency array ensures this runs once
 
-    // console.log("updated user", user.data._id);
-
-    // useEffect(() => {
-    //     async function saveReview() {
-    //         try {
-    //             const response = await fetch("/api/review/save-review", {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Authorization": `Bearer ${token}`,
-    //                     "Content-Type": "application/json",
-    //                 },
-    //                 body: JSON.stringify(saved),
-    //             });
-
-    //             if (!response.ok) {
-    //                 const errorResponse = await response.json();
-    //                 console.error("Error submitting review:", errorResponse.message || errorResponse.error);
-    //                 return;
-    //             }
-
-    //         }
-    //         catch {
-    //             console.log("error in saving review", error);
-
-    //         }
-    //     }
-    // })
-
-
     useEffect(() => {
         async function fetchRestaurants() {
             try {
@@ -134,6 +101,33 @@ const Page = () => {
             restaurant.description?.toLowerCase()?.includes(searchQuery.toLowerCase())
         )
         : restaurants;
+        
+        // console.log(restaurants);
+    const savedReview = async (reviewId) => {
+    const profileId = user?.data?._id;
+    console.log("Saving review with:", profileId, reviewId); // ✅ both should NOT be undefined
+
+    try {
+        const response = await fetch("/api/review/save-review", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ profileId, reviewId }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            setSaved(true);
+        }
+    } catch (error) {
+        console.error("Error saving review:", error);
+    }
+};
+
+// console.log(restaurants[0]?._id);
+
+        
+        
+        
 
     return (
         <>
@@ -246,9 +240,13 @@ const Page = () => {
                                     <div className="w-full md:w-[60%] flex flex-col gap-3">
                                         <div className="flex w-full justify-between items-start">
                                             <h2 className="text-2xl sm:text-3xl font-bold">{restaurant.name}</h2>
-                                            <button className="text-gray-500 hover:text-red-500 cursor-pointer">
+                                           {
+                                            saved ?  <button onClick={() => savedReview(restaurant?._id)} className="text-red-500 hover:text-gray-500 cursor-pointer">
+                                            <FaHeart size={24} />
+                                        </button> :  <button onClick={() => savedReview(restaurant?._id)} className="text-gray-500 hover:text-red-500 cursor-pointer">
                                                 <FaHeart size={24} />
                                             </button>
+                                           }
                                         </div>
                                         <p className="text-blue-500 text-sm sm:text-md">{restaurant.location}</p>
                                         <div className="flex items-center gap-1 text-green-600">
