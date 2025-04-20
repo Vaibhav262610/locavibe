@@ -82,7 +82,7 @@ const Navbar = () => {
                                 <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-50">
                                     <Link href="/profile" className="block px-4 py-3 hover:bg-gray-200">View Profile</Link>
                                     <Link href="/my-reviews" className="block px-4 py-3 hover:bg-gray-200">My Reviews</Link>
-                                    {/* <Link href="/saved" className="block px-4 py-3 hover:bg-gray-200">Saved</Link> */}
+                                    <Link href="/contact" className="block px-4 py-3 hover:bg-gray-200">Contact</Link>
                                     <button
                                         onClick={() => {
                                             Cookies.remove("token", { path: "/" });
