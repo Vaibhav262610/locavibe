@@ -103,8 +103,8 @@ const ProfilePage = () => {
 
   return (
     <>
-    <div className="w-full flex justify-center items-center">
-                <div className="w-full md:w-[65%]">
+    <div className="w-full flex justify-center items-center px-4 sm:px-6">
+                <div className="bg-red-50 w-full md:w-[65%]">
                     <Navbar />
                 </div>
             </div>
@@ -172,11 +172,11 @@ const ProfilePage = () => {
             About Me
           </h2>
           <p className="text-gray-300 text-sm leading-relaxed">
-            Hi, I'm {user.data.username}. I'm passionate about building cool
-            stuff on the web 🌐 and creating seamless user experiences. I love
-            coding, contributing to projects, and always looking to learn more
-            each day 🚀.
-          </p>
+  Hey {user.data.username} 👋 Welcome to <span className="text-white font-semibold">Locavibe</span>!  
+  We're all about helping you find your vibe locally — from the coziest cafés to hidden gems only the locals know 💫. 
+  Dive in, explore real reviews, and support the community one discovery at a time 🌟.
+</p>
+
         </div>
 
         {/* Stats */}
@@ -187,15 +187,15 @@ const ProfilePage = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div className="bg-gray-800 p-4 rounded-lg">
               <p className="text-2xl font-bold">12</p>
-              <p className="text-sm text-gray-400">Posts</p>
+              <p className="text-sm text-gray-400">Reviews</p>
             </div>
             <div className="bg-gray-800 p-4 rounded-lg">
               <p className="text-2xl font-bold">7</p>
-              <p className="text-sm text-gray-400">Communities</p>
+              <p className="text-sm text-gray-400">Likes</p>
             </div>
             <div className="bg-gray-800 p-4 rounded-lg">
               <p className="text-2xl font-bold">35</p>
-              <p className="text-sm text-gray-400">Friends</p>
+              <p className="text-sm text-gray-400">Impression</p>
             </div>
             <div className="bg-gray-800 p-4 rounded-lg">
               <p className="text-2xl font-bold">198</p>
