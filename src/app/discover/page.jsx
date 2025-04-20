@@ -6,13 +6,28 @@ import { FaStar, FaHeart } from "react-icons/fa";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { IoMdPricetag } from "react-icons/io";
 import withAuth from "@/lib/withAuth";
+import { FaCamera, FaUtensils, FaShoppingCart , FaClinicMedical  } from "react-icons/fa";
+import { FaStreetView } from "react-icons/fa6"
+import { MdElectricBolt  } from "react-icons/md"
+
+
+const sections = [
+    { name: "All", icon: "🏠", heading: "Where to?", placeholder: "Places to go, things to do, hotels..." },
+    { name: "Street Food", icon: <FaStreetView  />, heading: "Find Hotels", placeholder: "Search for hotels..." },
+    { name: "Places to Visit", icon: <FaCamera />, heading: "Discover Activities", placeholder: "Find attractions, tours..." },
+    { name: "Restaurants", icon: <FaUtensils />, heading: "Explore Restaurants", placeholder: "Search for restaurants..." },
+    { name: "Shopping", icon: <FaShoppingCart  />, heading: "Find the best clothes", placeholder: "Search for flights..." },
+    { name: "Electronics", icon: <MdElectricBolt  />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes..." },
+    { name: "Medical", icon: <FaClinicMedical  />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes..." },
+];
 
 const Page = () => {
     const [restaurants, setRestaurants] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [user, setUser] = useState()
-
+    const [loading, setLoading] = useState(true);
+    const [activeSection, setActiveSection] = useState(sections[0]);
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -122,12 +137,14 @@ const Page = () => {
                 ></iframe>
 
                 {/* Search & Dropdown */}
+                <div>
+
                 <div className="flex flex-col sm:flex-row gap-4 text-[#FFD9C4] mt-8 w-full items-center justify-center">
                     <div className="relative w-full sm:w-auto">
                         <button
                             onClick={toggleDropdown}
                             className="border border-white rounded-full px-6 py-3 flex items-center justify-center w-full sm:w-auto"
-                        >
+                            >
                             Chandigarh <ChevronDown className="ml-1" size={16} />
                         </button>
                         {isDropdownOpen && (
@@ -144,8 +161,21 @@ const Page = () => {
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="Search your vibe..."
                             className=" w-full outline-none text-[#D0D0D0] text-sm placeholder:text-[#D0D0D0] bg-transparent"
-                        />
+                            />
+                        </div>
                     </div>
+                    <div className="flex flex-nowrap overflow-x-auto justify-start md:justify-center items-center gap-4 w-full max-w-full pb-3 scrollbar-hide">
+                {sections.map((section) => (
+                    <button
+                        key={section.name}
+                        onClick={() => setActiveSection(section)}
+                        className={`flex items-center cursor-pointer duration-200 space-x-2 text-sm sm:text-lg font-semibold px-4 py-2 whitespace-nowrap ${activeSection.name === section.name ? "text-[#FFD9C4] border-b-2" : "text-[#D0D0D0]"}`}
+                    >
+                        <span>{section.icon}</span>
+                        <span>{section.name}</span>
+                    </button>
+                ))}
+            </div>
                 </div>
 
                 {/* Restaurant List */}
