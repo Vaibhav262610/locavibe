@@ -9,6 +9,7 @@ import withAuth from "@/lib/withAuth";
 import { FaCamera, FaUtensils, FaShoppingCart , FaClinicMedical  } from "react-icons/fa";
 import { FaStreetView } from "react-icons/fa6"
 import { MdElectricBolt  } from "react-icons/md"
+import Navbar from "@/components/Navbar";
 
 
 const sections = [
@@ -124,6 +125,12 @@ const Page = () => {
 
     return (
         <>
+            <div className="w-full flex justify-center items-center px-4 sm:px-6">
+                <div className="bg-red-50 w-full md:w-[65%]">
+                    <Navbar />
+              </div>
+            </div>
+
             <div className="md:mt-8 px-4 sm:px-6 md:px-1">
                 {/* <h1 className="text-center text-white md:text-5xl text-3xl font-black py-8">Discover your Vibe</h1> */}
                 {/* Google Map */}
@@ -164,7 +171,7 @@ const Page = () => {
                             />
                         </div>
                     </div>
-                    <div className="flex flex-nowrap overflow-x-auto justify-start md:justify-center items-center gap-4 w-full max-w-full pb-3 scrollbar-hide">
+                    <div className="flex mt-4 flex-nowrap overflow-x-auto justify-start md:justify-center items-center gap-4 w-full max-w-full scrollbar-hide">
                 {sections.map((section) => (
                     <button
                         key={section.name}

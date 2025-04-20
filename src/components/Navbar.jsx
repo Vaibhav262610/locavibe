@@ -37,8 +37,8 @@ const Navbar = () => {
     }, []);
 
     return (
-        <div className="w-full flex justify-center items-center">
-            <div className="bg-[#121b22] text-[#FFD9C4] w-full xl:w-[75%]  z-50 flex items-center justify-between py-7 px-6 md:px-10 lg:px-34">
+        <div className="w-full flex justify-between items-center ">
+            <div className="bg-[#121b22] text-[#FFD9C4] w-full  z-50 flex items-center justify-between py-7 px-6 md:px-10 lg:px-12">
                 {/* Mobile Menu Button */}
                 <div className="xl:hidden">
                     <HiMenu className="text-2xl cursor-pointer" onClick={() => setIsMobileMenuOpen(true)} />

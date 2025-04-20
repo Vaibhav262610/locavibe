@@ -28,12 +28,8 @@ const Page = () => {
 
     useEffect(() => {
         const checkAdmin = async () => {
-            const token =
-                localStorage.getItem("token") || localStorage.getItem("authToken");
-            if (!token) {
-                router.push("/login");
-                return;
-            }
+            const token = localStorage.getItem("token") || localStorage.getItem("authToken");
+            if (!token) return router.push("/login");
 
             try {
                 const response = await fetch("/api/users/profile", {
@@ -44,9 +40,7 @@ const Page = () => {
                     },
                 });
 
-                if (!response.ok) {
-                    throw new Error("Invalid or expired token");
-                }
+                if (!response.ok) throw new Error("Invalid or expired token");
 
                 const data = await response.json();
                 if (
@@ -132,98 +126,97 @@ const Page = () => {
     };
 
     return (
-        <div className="h-screen mb-20 mt-40 w-full flex justify-center items-center  p-6">
-            <div className="relative z-10 w-full max-w-lg sm:max-w-md bg-white/10 backdrop-blur-lg p-6 sm:p-8 rounded-2xl shadow-xl border border-white/20">
-                <h2 className="text-xl md:text-3xl font-bold text-center text-teal-400 mb-6">
-                    📍 Add a Restaurant
-                </h2>
+        <div className="min-h-screen w-full bg-gray-900 py-10 px-6 sm:px-20 text-white">
+            <h2 className="text-3xl font-bold text-teal-400 text-center mb-10">
+                📍 Add a Restaurant
+            </h2>
 
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
-                    {[{
-                        name: "name", placeholder: "Restaurant Name", emoji: "🏠"
-                    }, {
-                        name: "location", placeholder: "Location", emoji: "📍"
-                    }, {
-                        name: "imageUrl", placeholder: "Image URL", emoji: "🖼️"
-                    }, {
-                        name: "rating", placeholder: "Rating (1-5)", emoji: "⭐", type: "number"
-                    }, {
-                        name: "reviews", placeholder: "Number of Reviews", emoji: "📝", type: "number"
-                    }, {
-                        name: "categories", placeholder: "Categories (comma separated)", emoji: "📂"
-                    }, {
-                        name: "priceRange", placeholder: "Price Range", emoji: "💰"
-                    }, {
-                        name: "openingHours", placeholder: "Opening Hours", emoji: "⏰"
-                    }].map((field) => (
-                        <div key={field.name}>
-                            <label className="block text-xs font-medium text-gray-300 mb-1">
-                                {field.emoji} {field.placeholder}
-                            </label>
-                            <input
-                                type={field.type || "text"}
-                                name={field.name}
-                                placeholder={field.placeholder}
-                                className="w-full p-3 bg-gray-800/50 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition text-xs"
-                                onChange={handleChange}
-                                value={formData[field.name]}
-                                required
-                            />
-                        </div>
-                    ))}
-
-                    <div className="col-span-1">
-                        <label className="block text-xs font-medium text-gray-300 mb-1">
-                            📝 Description
+            <form
+                onSubmit={handleSubmit}
+                className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
+            >
+                {[{
+                    name: "name", placeholder: "Restaurant Name", emoji: "🏠"
+                }, {
+                    name: "location", placeholder: "Location", emoji: "📍"
+                }, {
+                    name: "imageUrl", placeholder: "Image URL", emoji: "🖼️"
+                }, {
+                    name: "rating", placeholder: "Rating (1-5)", emoji: "⭐", type: "number"
+                }, {
+                    name: "reviews", placeholder: "Number of Reviews", emoji: "📝", type: "number"
+                }, {
+                    name: "categories", placeholder: "Categories (comma separated)", emoji: "📂"
+                }, {
+                    name: "priceRange", placeholder: "Price Range", emoji: "💰"
+                }, {
+                    name: "openingHours", placeholder: "Opening Hours", emoji: "⏰"
+                }].map((field) => (
+                    <div key={field.name}>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">
+                            {field.emoji} {field.placeholder}
                         </label>
-                        <textarea
-                            name="description"
-                            placeholder="Description"
-                            className="w-full p-3 bg-gray-800/50 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition text-xs"
+                        <input
+                            type={field.type || "text"}
+                            name={field.name}
+                            placeholder={field.placeholder}
+                            className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition text-sm"
                             onChange={handleChange}
-                            value={formData.description}
+                            value={formData[field.name]}
                             required
                         />
                     </div>
+                ))}
 
-                    <div className="col-span-1 flex justify-center">
-                        <button
-                            type="submit"
-                            className={`w-full max-w-sm py-3 rounded-lg text-white font-semibold flex justify-center items-center transition-all ${loading
-                                ? "bg-gray-500 cursor-not-allowed"
-                                : "bg-teal-500 hover:bg-teal-600 transform hover:scale-105"
-                                }`}
-                            disabled={loading}
-                        >
-                            {loading ? (
-                                <div className="flex items-center gap-2">
-                                    <svg
-                                        className="animate-spin h-5 w-5 text-white"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <circle
-                                            className="opacity-25"
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            stroke="currentColor"
-                                            strokeWidth="4"
-                                        ></circle>
-                                        <path
-                                            className="opacity-75"
-                                            fill="currentColor"
-                                            d="M4 12a8 8 0 018-8v4l4-4-4-4v4a12 12 0 00-12 12h4z"
-                                        ></path>
-                                    </svg>
-                                    Uploading...
-                                </div>
-                            ) : (
-                                "🚀 Submit"
-                            )}
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                        📝 Description
+                    </label>
+                    <textarea
+                        name="description"
+                        placeholder="Description"
+                        className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition text-sm"
+                        onChange={handleChange}
+                        value={formData.description}
+                        required
+                        rows={4}
+                    />
+                </div>
+
+                <div className="md:col-span-2 flex justify-center mt-6">
+                    <button
+                        type="submit"
+                        className={`w-full max-w-md py-3 rounded-lg text-white font-semibold flex justify-center items-center transition-all ${loading
+                            ? "bg-gray-500 cursor-not-allowed"
+                            : "bg-teal-500 hover:bg-teal-600 transform hover:scale-105"
+                            }`}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <div className="flex items-center gap-2">
+                                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                                    <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                        className="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v4l4-4-4-4v4a12 12 0 00-12 12h4z"
+                                    ></path>
+                                </svg>
+                                Uploading...
+                            </div>
+                        ) : (
+                            "🚀 Submit"
+                        )}
+                    </button>
+                </div>
+            </form>
 
             <ToastContainer />
         </div>

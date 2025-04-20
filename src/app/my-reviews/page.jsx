@@ -3,6 +3,7 @@
 import withAuth from "@/lib/withAuth";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Navbar from "@/components/Navbar";
 
 const page = () => {
     const [loading, setLoading] = useState(true);
@@ -70,6 +71,7 @@ const page = () => {
 
     return (
         <>
+        <Navbar />
             <div className="flex justify-center w-full items-center px-4 sm:px-8">
                 <div className="relative w-full max-w-screen-xl mt-5 md:mt-32">
                     <h1 className="text-3xl text-white ">Your Reviews</h1>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaHotel, FaCamera, FaUtensils, FaPlane, FaHome } from "react-icons/fa";
+import Navbar from "./Navbar";
 
 const sections = [
     { name: "Search All", icon: "🏠", heading: "Where to?", placeholder: "Places to go, things to do, hotels..." },
@@ -17,6 +18,10 @@ const Page = () => {
     const [activeSection, setActiveSection] = useState(sections[0]);
 
     return (
+        <>
+        {/* <div className="w-full bg-red-500"> */}
+        <Navbar />
+        {/* </div> */}
         <div className="flex flex-col justify-center items-center w-full px-6 md:mt-12 lg:px-12 py-8">
             {/* Title */}
             <h1 className="font-black text-[#D0D0D0] mb-8 text-3xl sm:text-4xl lg:text-5xl text-center">
@@ -47,7 +52,7 @@ const Page = () => {
                         type="text"
                         placeholder={activeSection.placeholder}
                         className="flex-grow outline-none text-[#D0D0D0] md:w-[60rem]  text-sm sm:text-lg placeholder:text-[#D0D0D0] bg-transparent p-2 md:p-3"
-                    />
+                        />
                     <button className="bg-green-400 cursor-pointer text-black font-semibold px-6 py-3 rounded-br-full rounded-tr-full rounded-bl-xl rounded-tl-xl">
                         Search
                     </button>
@@ -62,7 +67,7 @@ const Page = () => {
                         src="/image.png"
                         alt="Travel Inspiration"
                         className=" rounded-md w-md"
-                    />
+                        />
                 </div>
                 <div className="p-4 flex flex-col items-center lg:items-start  w-fit">
                     <h1 className="text-xs text-black/50 mb-2">Made by Vaibhav Rajpoot 💖</h1>
@@ -83,6 +88,7 @@ const Page = () => {
 
             </div>
         </div>
+                        </>
     );
 };
 
