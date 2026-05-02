@@ -6,14 +6,22 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:db": "node scripts/test-db-connection.js",
+    "setup:db": "node scripts/test-db-connection.js"
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.6",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^8.2.2",
+    "@tanstack/react-query": "^5.100.6",
     "axios": "^1.8.1",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.6.0",
+    "dotenv": "^17.4.2",
     "framer-motion": "^12.7.4",
+    "framer-motion-3d": "^12.4.13",
+    "groq-sdk": "^1.1.2",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
@@ -27,7 +35,13 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
-    "react-toastify": "^11.0.5"
+    "react-intersection-observer": "^10.0.3",
+    "react-toastify": "^11.0.5",
+    "react-virtualized-auto-sizer": "^2.0.3",
+    "react-window": "^2.2.7",
+    "socket.io-client": "^4.8.3",
+    "three": "^0.184.0",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
