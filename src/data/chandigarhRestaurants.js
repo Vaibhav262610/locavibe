@@ -1,4 +1,4 @@
-// Hardcoded restaurant data for Chandigarh
+// Hardcoded restaurant data for Chandigarh with real images
 export const chandigarhRestaurants = [
     {
         _id: "rest_001",
@@ -12,7 +12,7 @@ export const chandigarhRestaurants = [
             lat: 30.7333,
             lng: 76.7794
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=300&fit=crop&crop=center",
         openNow: true,
         reviewCount: 1247,
         features: ["Outdoor Seating", "Parking", "Takeout"],
@@ -33,7 +33,7 @@ export const chandigarhRestaurants = [
             lat: 30.7387,
             lng: 76.7869
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop&crop=center",
         openNow: true,
         reviewCount: 892,
         features: ["WiFi", "Live Music", "Outdoor Seating", "Bar"],
@@ -54,7 +54,7 @@ export const chandigarhRestaurants = [
             lat: 30.7267,
             lng: 76.7781
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1630383249896-424e482df921?w=400&h=300&fit=crop&crop=center",
         openNow: true,
         reviewCount: 1567,
         features: ["Delivery", "Takeout", "Vegetarian"],
@@ -75,7 +75,7 @@ export const chandigarhRestaurants = [
             lat: 30.7046,
             lng: 76.8006
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop&crop=center",
         openNow: true,
         reviewCount: 2134,
         features: ["Buffet", "Bar", "Parking", "Air Conditioning"],
@@ -96,7 +96,7 @@ export const chandigarhRestaurants = [
             lat: 30.7514,
             lng: 76.7673
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400&h=300&fit=crop&crop=center",
         openNow: true,
         reviewCount: 756,
         features: ["Quick Service", "Takeout", "Delivery"],
@@ -117,7 +117,7 @@ export const chandigarhRestaurants = [
             lat: 30.7267,
             lng: 76.7781
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&crop=center",
         openNow: true,
         reviewCount: 1823,
         features: ["Live Grill", "Buffet", "Bar", "Parking"],
@@ -138,7 +138,7 @@ export const chandigarhRestaurants = [
             lat: 30.7267,
             lng: 76.7781
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=300&fit=crop&crop=center",
         openNow: true,
         reviewCount: 634,
         features: ["Sweets", "Takeout", "Vegetarian"],
@@ -159,7 +159,7 @@ export const chandigarhRestaurants = [
             lat: 30.7394,
             lng: 76.7731
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop&crop=center",
         openNow: true,
         reviewCount: 987,
         features: ["Vegetarian", "Sweets", "Takeout"],
@@ -180,7 +180,7 @@ export const chandigarhRestaurants = [
             lat: 30.7394,
             lng: 76.7731
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop&crop=center",
         openNow: true,
         reviewCount: 445,
         features: ["Quick Service", "Healthy Options", "Takeout"],
@@ -201,7 +201,7 @@ export const chandigarhRestaurants = [
             lat: 30.7267,
             lng: 76.7781
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=400&h=300&fit=crop&crop=center",
         openNow: false,
         reviewCount: 723,
         features: ["Ice Cream", "Family Restaurant", "Takeout"],
@@ -222,7 +222,7 @@ export const chandigarhRestaurants = [
             lat: 30.7267,
             lng: 76.7781
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=400&h=300&fit=crop&crop=center",
         openNow: true,
         reviewCount: 567,
         features: ["Delivery", "Takeout", "Quick Service"],
@@ -243,7 +243,7 @@ export const chandigarhRestaurants = [
             lat: 30.7387,
             lng: 76.7869
         },
-        image: "/api/placeholder/300/200",
+        image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=400&h=300&fit=crop&crop=center",
         openNow: true,
         reviewCount: 1456,
         features: ["Microbrewery", "Live Music", "Outdoor Seating", "Bar"],

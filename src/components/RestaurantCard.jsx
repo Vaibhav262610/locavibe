@@ -60,8 +60,19 @@ const RestaurantCard = ({
       >
         <div className="flex items-center gap-4">
           {/* Restaurant Image */}
-          <div className="relative w-20 h-20 flex-shrink-0">
-            <div className="w-full h-full bg-gradient-to-br from-[#33e0a1]/20 to-[#33e0a1]/5 rounded-xl flex items-center justify-center">
+          <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden rounded-xl">
+            {restaurant.image ? (
+              <img 
+                src={restaurant.image} 
+                alt={restaurant.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+            ) : null}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#33e0a1]/20 to-[#33e0a1]/5 flex items-center justify-center" style={{ display: restaurant.image ? 'none' : 'flex' }}>
               <span className="text-[#33e0a1] text-xs">IMG</span>
             </div>
             {restaurant.openNow !== undefined && (
@@ -125,8 +136,19 @@ const RestaurantCard = ({
       className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-all duration-300 group"
     >
       {/* Restaurant Image */}
-      <div className="relative h-48 bg-gradient-to-br from-[#33e0a1]/20 to-[#33e0a1]/5">
-        <div className="absolute inset-0 flex items-center justify-center">
+      <div className="relative h-48 bg-gradient-to-br from-[#33e0a1]/20 to-[#33e0a1]/5 overflow-hidden">
+        {restaurant.image ? (
+          <img 
+            src={restaurant.image} 
+            alt={restaurant.name}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
+            }}
+          />
+        ) : null}
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#33e0a1]/20 to-[#33e0a1]/5" style={{ display: restaurant.image ? 'none' : 'flex' }}>
           <span className="text-[#33e0a1] text-sm">Restaurant Image</span>
         </div>
         

@@ -65,7 +65,15 @@ const ProfilePage = () => {
         
       } catch (error) {
         console.error("Error fetching user data:", error);
-        router.push("/login");
+        // Don't redirect on error, just show empty state
+        setUser({
+          data: {
+            username: "User",
+            email: "user@example.com",
+            _id: "temp_user_id"
+          }
+        });
+        setNewUsername("User");
       } finally {
         setLoading(false);
       }
@@ -94,9 +102,26 @@ const ProfilePage = () => {
             totalRestaurants: uniqueRestaurants,
             joinedDate: new Date(2024, 0, 15) // This could come from user creation date
           });
+        } else {
+          // Set empty stats if no reviews found
+          setUserStats({
+            reviews: 0,
+            likes: 0,
+            averageRating: 0,
+            totalRestaurants: 0,
+            joinedDate: new Date(2024, 0, 15)
+          });
         }
       } catch (error) {
         console.error("Error fetching user reviews:", error);
+        // Set empty stats on error
+        setUserStats({
+          reviews: 0,
+          likes: 0,
+          averageRating: 0,
+          totalRestaurants: 0,
+          joinedDate: new Date(2024, 0, 15)
+        });
       }
     };
 

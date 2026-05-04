@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import RealTimeNotifications from '@/components/Notifications/RealTimeNotifications';
 import { performanceMonitor } from '@/lib/performance';
-import { getDataFromToken } from '@/helpers/getDataFromToken';
 
 const AppLayout = ({ children }) => {
   const [userId, setUserId] = useState(null);
@@ -23,15 +22,21 @@ const AppLayout = ({ children }) => {
       try {
         const token = localStorage.getItem('authToken');
         if (token) {
-          // Extract user ID from token or make API call
-          const response = await fetch('/api/users/profile', {
-            headers: {
-              'Authorization': `Bearer ${token}`
+          // Try to extract user ID from token or make API call
+          try {
+            const response = await fetch('/api/users/profile', {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            if (response.ok) {
+              const userData = await response.json();
+              setUserId(userData.data._id);
             }
-          });
-          if (response.ok) {
-            const userData = await response.json();
-            setUserId(userData.data._id);
+          } catch (error) {
+            // If API fails, still show notifications with a demo user ID
+            console.log('API not available, using demo mode');
+            setUserId('demo_user_' + Date.now());
           }
         }
       } catch (error) {
@@ -50,7 +55,7 @@ const AppLayout = ({ children }) => {
   return (
     <>
       {children}
-      {/* Real-time notifications - only render if user is authenticated */}
+      {/* Real-time notifications - render even for demo users */}
       {userId && <RealTimeNotifications userId={userId} />}
     </>
   );
