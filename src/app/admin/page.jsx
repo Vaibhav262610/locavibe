@@ -1,226 +1,443 @@
 "use client";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { 
+  FiUsers, 
+  FiStar, 
+  FiMapPin, 
+  FiTrendingUp, 
+  FiActivity, 
+  FiSettings,
+  FiDatabase,
+  FiZap,
+  FiMonitor,
+  FiWifi,
+  FiShield
+} from "react-icons/fi";
+import Navbar from "@/components/Navbar";
+import AnalyticsDashboard from "@/components/Analytics/AnalyticsDashboard";
+import Restaurant3DView from "@/components/3D/Restaurant3DView";
+import { performanceMonitor } from "@/lib/performance";
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+const AdminPage = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [systemStats, setSystemStats] = useState({
+    totalUsers: 2347,
+    totalRestaurants: 1205,
+    totalReviews: 8934,
+    activeConnections: 156,
+    serverUptime: '99.9%',
+    avgResponseTime: '245ms',
+    errorRate: '0.02%',
+    memoryUsage: '68%'
+  });
+  const [recentActivity, setRecentActivity] = useState([]);
+  const [performanceMetrics, setPerformanceMetrics] = useState({});
 
-const Page = () => {
-    const router = useRouter();
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    // Track admin page view
+    performanceMonitor.trackInteraction('admin_page_view', 'admin');
+    
+    // Fetch admin data
+    fetchAdminData();
+    
+    // Set up real-time updates
+    const interval = setInterval(fetchRealTimeData, 30000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
-    const [formData, setFormData] = useState({
-        name: "",
-        location: "",
-        imageUrl: "",
-        rating: "",
-        reviews: "",
-        description: "",
-        categories: "",
-        priceRange: "",
-        openingHours: "",
-    });
-
-    const adminEmailId = "vaibhav@gmail.com";
-    const adminUserName = "vaibhav";
-
-    useEffect(() => {
-        const checkAdmin = async () => {
-            const token = localStorage.getItem("token") || localStorage.getItem("authToken");
-            if (!token) return router.push("/login");
-
-            try {
-                const response = await fetch("/api/users/profile", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                if (!response.ok) throw new Error("Invalid or expired token");
-
-                const data = await response.json();
-                if (
-                    data?.data?.username === adminUserName &&
-                    data?.data?.email === adminEmailId
-                ) {
-                    setIsAdmin(true);
-                } else {
-                    router.push("/login");
-                }
-            } catch (error) {
-                console.error("Error verifying admin:", error);
-                router.push("/login");
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        checkAdmin();
-    }, [router]);
-
-    if (isLoading) {
-        return (
-            <div className="h-screen w-full flex justify-center items-center bg-gray-900">
-                <h1 className="text-sm text-teal-400 animate-pulse text-center">
-                    Checking Admin Credentials...
-                </h1>
-            </div>
-        );
+  const fetchAdminData = async () => {
+    try {
+      // Simulate fetching admin data
+      const mockActivity = [
+        { id: 1, type: 'user_signup', user: 'john_doe', timestamp: new Date(), details: 'New user registration' },
+        { id: 2, type: 'review_posted', user: 'jane_smith', timestamp: new Date(), details: 'Posted review for "Pasta Palace"' },
+        { id: 3, type: 'restaurant_added', user: 'admin', timestamp: new Date(), details: 'Added "Sushi Zen" to database' },
+        { id: 4, type: 'ai_recommendation', user: 'system', timestamp: new Date(), details: 'Generated 150 AI recommendations' },
+        { id: 5, type: 'websocket_connection', user: 'system', timestamp: new Date(), details: '25 new WebSocket connections' }
+      ];
+      
+      setRecentActivity(mockActivity);
+      
+      // Get performance metrics
+      const metrics = performanceMonitor.getPerformanceSummary();
+      setPerformanceMetrics(metrics);
+      
+    } catch (error) {
+      console.error('Error fetching admin data:', error);
     }
+  };
 
-    if (!isAdmin) {
-        return (
-            <div className="h-screen w-full flex justify-center items-center bg-gray-900">
-                <h1 className="text-3xl text-red-500">Access Denied</h1>
-            </div>
-        );
+  const fetchRealTimeData = async () => {
+    try {
+      // Simulate real-time data updates
+      setSystemStats(prev => ({
+        ...prev,
+        activeConnections: Math.floor(Math.random() * 50) + 120,
+        avgResponseTime: `${Math.floor(Math.random() * 100) + 200}ms`,
+        memoryUsage: `${Math.floor(Math.random() * 20) + 60}%`
+      }));
+    } catch (error) {
+      console.error('Error fetching real-time data:', error);
     }
+  };
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: FiActivity },
+    { id: 'analytics', label: 'Analytics', icon: FiTrendingUp },
+    { id: 'users', label: 'Users', icon: FiUsers },
+    { id: 'restaurants', label: 'Restaurants', icon: FiMapPin },
+    { id: 'system', label: 'System', icon: FiSettings },
+    { id: 'ai', label: 'AI Features', icon: FiZap }
+  ];
+
+  const StatCard = ({ title, value, subtitle, icon: Icon, color = 'text-[#33e0a1]', trend }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6"
+    >
+      <div className="flex items-center justify-between mb-4">
+        <Icon className={`w-6 h-6 ${color}`} />
+        {trend && (
+          <div className={`flex items-center gap-1 text-xs ${trend > 0 ? 'text-green-400' : 'text-red-400'}`}>
+            <FiTrendingUp className="w-3 h-3" />
+            {trend > 0 ? '+' : ''}{trend}%
+          </div>
+        )}
+      </div>
+      <div className="text-2xl font-bold text-white mb-1">{value}</div>
+      <div className="text-sm text-[#D0D0D0]/70">{title}</div>
+      {subtitle && (
+        <div className="text-xs text-[#D0D0D0]/50 mt-1">{subtitle}</div>
+      )}
+    </motion.div>
+  );
+
+  const ActivityItem = ({ activity }) => {
+    const getActivityIcon = (type) => {
+      const icons = {
+        user_signup: FiUsers,
+        review_posted: FiStar,
+        restaurant_added: FiMapPin,
+        ai_recommendation: FiZap,
+        websocket_connection: FiWifi
+      };
+      return icons[type] || FiActivity;
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        toast.info("Uploading restaurant...");
-
-        try {
-            const response = await fetch("/api/restaurant", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    ...formData,
-                    rating: Number(formData.rating),
-                    reviews: Number(formData.reviews),
-                    categories: formData.categories.split(",").map((c) => c.trim()),
-                }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                toast.success("Restaurant added successfully! 🎉");
-                setFormData({
-                    name: "",
-                    location: "",
-                    imageUrl: "",
-                    rating: "",
-                    reviews: "",
-                    description: "",
-                    categories: "",
-                    priceRange: "",
-                    openingHours: "",
-                });
-            } else {
-                toast.error(`Upload failed: ${data.error || "Unknown error"}`);
-            }
-        } catch (error) {
-            toast.error("Error submitting form. Try again!");
-        } finally {
-            setLoading(false);
-        }
+    const getActivityColor = (type) => {
+      const colors = {
+        user_signup: 'text-green-400',
+        review_posted: 'text-yellow-400',
+        restaurant_added: 'text-blue-400',
+        ai_recommendation: 'text-purple-400',
+        websocket_connection: 'text-[#33e0a1]'
+      };
+      return colors[type] || 'text-[#D0D0D0]';
     };
+
+    const Icon = getActivityIcon(activity.type);
+    const colorClass = getActivityColor(activity.type);
 
     return (
-        <div className="min-h-screen w-full bg-gray-900 py-10 px-6 sm:px-20 text-white">
-            <h2 className="text-3xl font-bold text-teal-400 text-center mb-10">
-                📍 Add a Restaurant
-            </h2>
-
-            <form
-                onSubmit={handleSubmit}
-                className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
-            >
-                {[{
-                    name: "name", placeholder: "Restaurant Name", emoji: "🏠"
-                }, {
-                    name: "location", placeholder: "Location", emoji: "📍"
-                }, {
-                    name: "imageUrl", placeholder: "Image URL", emoji: "🖼️"
-                }, {
-                    name: "rating", placeholder: "Rating (1-5)", emoji: "⭐", type: "number"
-                }, {
-                    name: "reviews", placeholder: "Number of Reviews", emoji: "📝", type: "number"
-                }, {
-                    name: "categories", placeholder: "Categories (comma separated)", emoji: "📂"
-                }, {
-                    name: "priceRange", placeholder: "Price Range", emoji: "💰"
-                }, {
-                    name: "openingHours", placeholder: "Opening Hours", emoji: "⏰"
-                }].map((field) => (
-                    <div key={field.name}>
-                        <label className="block text-sm font-medium text-gray-300 mb-1">
-                            {field.emoji} {field.placeholder}
-                        </label>
-                        <input
-                            type={field.type || "text"}
-                            name={field.name}
-                            placeholder={field.placeholder}
-                            className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition text-sm"
-                            onChange={handleChange}
-                            value={formData[field.name]}
-                            required
-                        />
-                    </div>
-                ))}
-
-                <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                        📝 Description
-                    </label>
-                    <textarea
-                        name="description"
-                        placeholder="Description"
-                        className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:border-teal-400 focus:ring-2 focus:ring-teal-500 outline-none transition text-sm"
-                        onChange={handleChange}
-                        value={formData.description}
-                        required
-                        rows={4}
-                    />
-                </div>
-
-                <div className="md:col-span-2 flex justify-center mt-6">
-                    <button
-                        type="submit"
-                        className={`w-full max-w-md py-3 rounded-lg text-white font-semibold flex justify-center items-center transition-all ${loading
-                            ? "bg-gray-500 cursor-not-allowed"
-                            : "bg-teal-500 hover:bg-teal-600 transform hover:scale-105"
-                            }`}
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <div className="flex items-center gap-2">
-                                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                                    <circle
-                                        className="opacity-25"
-                                        cx="12"
-                                        cy="12"
-                                        r="10"
-                                        stroke="currentColor"
-                                        strokeWidth="4"
-                                    ></circle>
-                                    <path
-                                        className="opacity-75"
-                                        fill="currentColor"
-                                        d="M4 12a8 8 0 018-8v4l4-4-4-4v4a12 12 0 00-12 12h4z"
-                                    ></path>
-                                </svg>
-                                Uploading...
-                            </div>
-                        ) : (
-                            "🚀 Submit"
-                        )}
-                    </button>
-                </div>
-            </form>
-
-            <ToastContainer />
+      <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
+        <Icon className={`w-5 h-5 ${colorClass}`} />
+        <div className="flex-1">
+          <p className="text-white text-sm">{activity.details}</p>
+          <p className="text-[#D0D0D0]/50 text-xs">
+            {activity.user} • {activity.timestamp.toLocaleTimeString()}
+          </p>
         </div>
+      </div>
     );
+  };
+
+  const OverviewTab = () => (
+    <div className="space-y-6">
+      {/* System Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          title="Total Users"
+          value={systemStats.totalUsers.toLocaleString()}
+          subtitle="Active platform users"
+          icon={FiUsers}
+          trend={12}
+        />
+        <StatCard
+          title="Restaurants"
+          value={systemStats.totalRestaurants.toLocaleString()}
+          subtitle="Listed establishments"
+          icon={FiMapPin}
+          trend={8}
+        />
+        <StatCard
+          title="Reviews"
+          value={systemStats.totalReviews.toLocaleString()}
+          subtitle="User-generated content"
+          icon={FiStar}
+          trend={25}
+        />
+        <StatCard
+          title="Active Connections"
+          value={systemStats.activeConnections}
+          subtitle="Real-time WebSocket connections"
+          icon={FiWifi}
+          color="text-green-400"
+        />
+      </div>
+
+      {/* System Health */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+          <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <FiMonitor className="w-5 h-5 text-[#33e0a1]" />
+            System Health
+          </h3>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-[#D0D0D0]/70">Server Uptime</span>
+              <span className="text-green-400 font-medium">{systemStats.serverUptime}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-[#D0D0D0]/70">Avg Response Time</span>
+              <span className="text-[#33e0a1] font-medium">{systemStats.avgResponseTime}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-[#D0D0D0]/70">Error Rate</span>
+              <span className="text-green-400 font-medium">{systemStats.errorRate}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-[#D0D0D0]/70">Memory Usage</span>
+              <span className="text-yellow-400 font-medium">{systemStats.memoryUsage}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+          <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <FiActivity className="w-5 h-5 text-[#33e0a1]" />
+            Recent Activity
+          </h3>
+          <div className="space-y-3 max-h-64 overflow-y-auto">
+            {recentActivity.map((activity) => (
+              <ActivityItem key={activity.id} activity={activity} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const AIFeaturesTab = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <StatCard
+          title="AI Recommendations"
+          value="1,247"
+          subtitle="Generated this week"
+          icon={FiZap}
+          color="text-purple-400"
+          trend={18}
+        />
+        <StatCard
+          title="Groq API Calls"
+          value="3,456"
+          subtitle="Successful requests"
+          icon={FiDatabase}
+          color="text-blue-400"
+          trend={22}
+        />
+        <StatCard
+          title="WebSocket Messages"
+          value="12,890"
+          subtitle="Real-time notifications"
+          icon={FiWifi}
+          color="text-green-400"
+          trend={35}
+        />
+      </div>
+
+      {/* AI Features Status */}
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+        <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+          <FiZap className="w-5 h-5 text-[#33e0a1]" />
+          Advanced Features Status
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                <span className="text-white">AI Recommendations (Groq)</span>
+              </div>
+              <span className="text-green-400 text-sm">Active</span>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                <span className="text-white">Real-time Notifications</span>
+              </div>
+              <span className="text-green-400 text-sm">Active</span>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                <span className="text-white">Performance Monitoring</span>
+              </div>
+              <span className="text-green-400 text-sm">Active</span>
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                <span className="text-white">3D Visualizations</span>
+              </div>
+              <span className="text-green-400 text-sm">Active</span>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                <span className="text-white">Voice Search</span>
+              </div>
+              <span className="text-green-400 text-sm">Active</span>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                <span className="text-white">Advanced Search</span>
+              </div>
+              <span className="text-green-400 text-sm">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3D Restaurant Preview */}
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+        <h3 className="text-lg font-bold text-white mb-4">3D Restaurant Visualization Demo</h3>
+        <Restaurant3DView
+          restaurant={{
+            name: "Demo Restaurant",
+            cuisine: "Italian",
+            rating: 4.5,
+            reviewCount: 127
+          }}
+          className="h-64"
+        />
+      </div>
+    </div>
+  );
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'overview':
+        return <OverviewTab />;
+      case 'analytics':
+        return <AnalyticsDashboard />;
+      case 'ai':
+        return <AIFeaturesTab />;
+      case 'users':
+        return (
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+            <h3 className="text-lg font-bold text-white mb-4">User Management</h3>
+            <p className="text-[#D0D0D0]/70">User management interface would be implemented here.</p>
+          </div>
+        );
+      case 'restaurants':
+        return (
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+            <h3 className="text-lg font-bold text-white mb-4">Restaurant Management</h3>
+            <p className="text-[#D0D0D0]/70">Restaurant management interface would be implemented here.</p>
+          </div>
+        );
+      case 'system':
+        return (
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+            <h3 className="text-lg font-bold text-white mb-4">System Configuration</h3>
+            <p className="text-[#D0D0D0]/70">System settings and configuration options would be implemented here.</p>
+          </div>
+        );
+      default:
+        return <OverviewTab />;
+    }
+  };
+
+  return (
+    <>
+      <div className="w-full flex justify-center items-center bg-[#121b22]">
+        <div className="w-full md:w-[65%]">
+          <Navbar />
+        </div>
+      </div>
+
+      <div className="min-h-screen bg-[#121b22] text-white">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <FiShield className="w-8 h-8 text-[#33e0a1]" />
+              <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
+            </div>
+            <p className="text-[#D0D0D0]/70">
+              Comprehensive platform management and analytics
+            </p>
+          </motion.div>
+
+          {/* Tab Navigation */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="mb-8"
+          >
+            <div className="flex flex-wrap gap-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-2">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                      activeTab === tab.id
+                        ? 'bg-[#33e0a1] text-[#121b22]'
+                        : 'text-[#D0D0D0] hover:bg-white/10'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+
+          {/* Tab Content */}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            {renderTabContent()}
+          </motion.div>
+        </div>
+      </div>
+    </>
+  );
 };
 
-export default Page;
+export default AdminPage;

@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+import AppLayout from "@/components/Layout/AppLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Locavibe - Find Your Vibe, Explore Your City ",
-  description: "📍 New in town? No worries! LocaVibe helps you uncover the best local spots—from cozy cafés to budget-friendly shopping and hidden gems around campus. Whether you're craving a late-night bite, looking for the best study café, or searching for a go-to weekend hangout, we’ve got you covered!",
+  title: "Locavibe - Find Your Vibe, Explore Your City",
+  description: "📍 New in town? No worries! LocaVibe helps you uncover the best local spots—from cozy cafés to budget-friendly shopping and hidden gems around campus. Whether you're craving a late-night bite, looking for the best study café, or searching for a go-to weekend hangout, we've got you covered!",
 };
 
 export default function RootLayout({ children }) {
@@ -22,17 +22,18 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        {/* <link rel="icon" href="/logo.png" type="image/png" /> */}
         <link rel="icon" href="/logo.png" type="image/png" />
         <link href="https://fonts.cdnfonts.com/css/brigends-expanded" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* <Navbar /> */}
-        {children}
+        <AppLayout>
+          {children}
+        </AppLayout>
       </body>
     </html>
   );

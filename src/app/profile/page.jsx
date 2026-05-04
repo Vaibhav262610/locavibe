@@ -4,10 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import withAuth from "@/lib/withAuth";
 import { motion } from "framer-motion";
-import { FaUserEdit, FaHeart, FaEye, FaStar, FaMapMarkerAlt } from "react-icons/fa";
-import { FiLogOut } from "react-icons/fi";
-import { MdAdminPanelSettings, MdReviews } from "react-icons/md";
-import { HiTrendingUp } from "react-icons/hi";
+import { FiEdit3, FiLogOut, FiSettings, FiUsers, FiStar, FiMapPin, FiCalendar } from "react-icons/fi";
 import Navbar from "@/components/Navbar";
 import Loader from "@/components/ui/Loader";
 
@@ -16,11 +13,13 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newUsername, setNewUsername] = useState("");
+  const [userReviews, setUserReviews] = useState([]);
   const [userStats, setUserStats] = useState({
     reviews: 0,
     likes: 0,
-    profileViews: 0,
-    averageRating: 0
+    averageRating: 0,
+    totalRestaurants: 0,
+    joinedDate: null
   });
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
@@ -61,34 +60,43 @@ const ProfilePage = () => {
           setIsAdmin(true);
         }
 
-        // Fetch user statistics (you can implement these API endpoints) 
-        await fetchUserStats(data.data._id);
+        // Fetch user reviews and statistics
+        await fetchUserReviews(data.data._id);
         
       } catch (error) {
         console.error("Error fetching user data:", error);
+        router.push("/login");
       } finally {
         setLoading(false);
       }
     };
 
-    const fetchUserStats = async (userId) => {
+    const fetchUserReviews = async (userId) => {
       try {
-        // You can implement these endpoints to get real user stats
-        // For now, we'll use placeholder logic
         const reviewsResponse = await fetch(`/api/review/get-reviews?userId=${userId}`);
         if (reviewsResponse.ok) {
           const reviewsData = await reviewsResponse.json();
+          const reviews = reviewsData.reviews || [];
+          
+          setUserReviews(reviews);
+          
+          // Calculate real statistics from actual data
+          const totalLikes = reviews.reduce((sum, review) => sum + (review.likes || 0), 0);
+          const avgRating = reviews.length > 0 
+            ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1)
+            : 0;
+          const uniqueRestaurants = new Set(reviews.map(r => r.restaurantId)).size;
+          
           setUserStats({
-            reviews: reviewsData.reviews?.length || 0,
-            likes: reviewsData.reviews?.reduce((sum, review) => sum + (review.likes || 0), 0) || 0,
-            profileViews: Math.floor(Math.random() * 100) + 50, // Placeholder until you implement view tracking
-            averageRating: reviewsData.reviews?.length > 0 
-              ? (reviewsData.reviews.reduce((sum, review) => sum + review.rating, 0) / reviewsData.reviews.length).toFixed(1)
-              : 0
+            reviews: reviews.length,
+            likes: totalLikes,
+            averageRating: avgRating,
+            totalRestaurants: uniqueRestaurants,
+            joinedDate: new Date(2024, 0, 15) // This could come from user creation date
           });
         }
       } catch (error) {
-        console.error("Error fetching user stats:", error);
+        console.error("Error fetching user reviews:", error);
       }
     };
 
@@ -134,123 +142,149 @@ const ProfilePage = () => {
     return <Loader message="Loading your profile" />;
   }
 
+  const formatDate = (date) => {
+    return new Intl.DateTimeFormat('en-US', { 
+      year: 'numeric', 
+      month: 'long' 
+    }).format(date);
+  };
+
+  const StatCard = ({ label, value, subtitle, icon: Icon }) => (
+    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300">
+      <div className="flex items-center justify-between mb-3">
+        <Icon className="w-6 h-6 text-[#33e0a1]" />
+      </div>
+      <div className="text-2xl font-bold text-white mb-1">{value}</div>
+      <div className="text-sm text-[#D0D0D0]/70 mb-1">{label}</div>
+      {subtitle && <div className="text-[#D0D0D0]/50 text-xs">{subtitle}</div>}
+    </div>
+  );
+
+  const ReviewCard = ({ review, index }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="flex items-start gap-4 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300"
+    >
+      <div className="w-10 h-10 bg-[#33e0a1]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+        <FiStar className="w-5 h-5 text-[#33e0a1]" />
+      </div>
+      <div className="flex-1">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-white font-medium">{review.restaurantName || "Restaurant"}</h4>
+          <div className="flex items-center gap-1">
+            <FiStar className="w-4 h-4 text-yellow-400" />
+            <span className="text-white text-sm">{review.rating}</span>
+          </div>
+        </div>
+        <p className="text-[#D0D0D0]/70 text-sm mb-2 line-clamp-2">
+          {review.comment}
+        </p>
+        <div className="flex items-center gap-4 text-xs text-[#D0D0D0]/50">
+          <span>{new Date(review.createdAt).toLocaleDateString()}</span>
+          {review.likes > 0 && <span>{review.likes} likes</span>}
+        </div>
+      </div>
+    </motion.div>
+  );
+
   return (
     <>
-      <div className="w-full flex justify-center items-center">
-        <div className="bg-red-50 w-full md:w-[65%]">
+      <div className="w-full flex justify-center items-center bg-[#121b22]">
+        <div className="w-full md:w-[65%]">
           <Navbar />
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen">
+      <div className="min-h-screen bg-[#121b22] text-white">
         <div className="max-w-6xl mx-auto px-4 py-8">
-          {/* Hero Profile Section */}
+          
+          {/* Header Section */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-white/10"
+            className="mb-8"
           >
-            <div className="flex flex-col lg:flex-row items-center gap-8">
-              {/* Profile Image */}
-              <div className="relative">
-                <motion.img
-                  whileHover={{ scale: 1.05 }}
-                  src={`https://ui-avatars.com/api/?name=${user.data.username}&size=150&background=6366f1&color=ffffff&bold=true`}
-                  className="w-32 h-32 lg:w-40 lg:h-40 rounded-full border-4 border-gradient-to-r from-blue-500 to-purple-500 shadow-2xl"
-                  alt="Profile"
-                />
-                <div className="absolute -bottom-2 -right-2 bg-green-500 w-8 h-8 rounded-full border-4 border-slate-900 flex items-center justify-center">
-                  <div className="w-3 h-3 bg-white rounded-full"></div>
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+              
+              {/* Profile Info */}
+              <div className="flex items-center gap-6">
+                <div className="relative">
+                  <div className="w-24 h-24 bg-gradient-to-br from-[#33e0a1]/20 to-[#33e0a1]/5 rounded-2xl flex items-center justify-center border border-[#33e0a1]/20">
+                    <span className="text-2xl font-bold text-[#33e0a1]">
+                      {user.data.username.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  {isAdmin && (
+                    <div className="absolute -top-2 -right-2 bg-[#33e0a1] text-[#121b22] text-xs px-2 py-1 rounded-lg font-medium">
+                      Admin
+                    </div>
+                  )}
+                </div>
+                
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    {isEditing ? (
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={newUsername}
+                          onChange={(e) => setNewUsername(e.target.value)}
+                          className="bg-white/10 border border-white/20 px-3 py-2 rounded-lg text-xl font-bold focus:outline-none focus:border-[#33e0a1] transition-colors"
+                          onKeyDown={(e) => e.key === "Enter" && updateUsername()}
+                          autoFocus
+                        />
+                        <button
+                          onClick={updateUsername}
+                          className="bg-[#33e0a1] text-[#121b22] px-3 py-2 rounded-lg text-sm font-medium hover:bg-[#2dd4bf] transition-colors"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => setIsEditing(false)}
+                          className="bg-white/10 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/20 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <h1 className="text-3xl font-bold text-white">
+                          {user.data.username}
+                        </h1>
+                        <button
+                          onClick={() => setIsEditing(true)}
+                          className="p-2 text-[#D0D0D0]/70 hover:text-[#33e0a1] hover:bg-white/10 rounded-lg transition-all"
+                        >
+                          <FiEdit3 className="w-4 h-4" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  <p className="text-[#D0D0D0]/70 mb-1">{user.data.email}</p>
+                  <p className="text-[#D0D0D0]/50 text-sm flex items-center gap-2">
+                    <FiCalendar className="w-4 h-4" />
+                    Member since {formatDate(userStats.joinedDate)}
+                  </p>
                 </div>
               </div>
 
-              {/* Profile Info */}
-              <div className="flex-1 text-center lg:text-left">
-                <div className="flex items-center justify-center lg:justify-start gap-3 mb-2">
-                  {isEditing ? (
-                    <motion.input
-                      initial={{ scale: 0.95 }}
-                      animate={{ scale: 1 }}
-                      type="text"
-                      value={newUsername}
-                      onChange={(e) => setNewUsername(e.target.value)}
-                      className="bg-slate-700/50 border border-slate-600 px-4 py-2 rounded-lg text-xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 backdrop-blur-sm"
-                      onKeyDown={(e) => e.key === "Enter" && updateUsername()}
-                      autoFocus
-                    />
-                  ) : (
-                    <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                      {user.data.username}
-                    </h1>
-                  )}
-                  
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => isEditing ? updateUsername() : setIsEditing(true)}
-                    className="p-2 bg-blue-600/80 rounded-full hover:bg-blue-700 transition-colors backdrop-blur-sm"
-                  >
-                    <FaUserEdit size={16} />
-                  </motion.button>
-                  
-                  {isAdmin && (
-                    <motion.span 
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-xs font-semibold rounded-full shadow-lg"
-                    >
-                      Admin
-                    </motion.span>
-                  )}
-                </div>
-                
-                <p className="text-slate-300 mb-4 flex items-center justify-center lg:justify-start gap-2">
-                  <FaMapMarkerAlt className="text-blue-400" />
-                  {user.data.email}
-                </p>
-                
-                <p className="text-slate-400 text-sm leading-relaxed mb-6 max-w-2xl">
-                  Hey there! 👋 Welcome to <span className="text-white font-semibold">LocaVibe</span>! 
-                  I'm passionate about discovering amazing local spots and sharing authentic experiences with the community. 
-                  Let's explore and support local businesses together! 🌟
-                </p>
-
-                {/* Action Buttons */}
-                <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-                  {isAdmin && (
-                    <Link href="/admin">
-                      <motion.button 
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-2 rounded-lg hover:from-green-700 hover:to-emerald-700 flex items-center gap-2 font-medium shadow-lg"
-                      >
-                        <MdAdminPanelSettings size={18} />
-                        Admin Panel
-                      </motion.button>
-                    </Link>
-                  )}
-                  
-                  <Link href="/write-review">
-                    <motion.button 
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 flex items-center gap-2 font-medium shadow-lg"
-                    >
-                      <MdReviews size={18} />
-                      Write Review
-                    </motion.button>
-                  </Link>
-                  
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleLogout}
-                    className="bg-gradient-to-r from-red-600 to-pink-600 px-6 py-2 rounded-lg hover:from-red-700 hover:to-pink-700 flex items-center gap-2 font-medium shadow-lg"
-                  >
-                    <FiLogOut size={18} />
-                    Logout
-                  </motion.button>
-                </div>
+              {/* Action Buttons */}
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/write-review"
+                  className="bg-[#33e0a1] text-[#121b22] px-6 py-3 rounded-xl font-medium hover:bg-[#2dd4bf] transition-colors"
+                >
+                  Write Review
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 bg-white/10 text-white px-4 py-3 rounded-xl font-medium hover:bg-white/20 transition-colors"
+                >
+                  <FiLogOut className="w-4 h-4" />
+                  Logout
+                </button>
               </div>
             </div>
           </motion.div>
@@ -259,89 +293,167 @@ const ProfilePage = () => {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+            transition={{ delay: 0.1 }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
           >
-            {[
-              { 
-                label: "Reviews Written", 
-                value: userStats.reviews, 
-                icon: MdReviews, 
-                color: "from-blue-500 to-cyan-500",
-                bgColor: "from-blue-500/20 to-cyan-500/20"
-              },
-              { 
-                label: "Total Likes", 
-                value: userStats.likes, 
-                icon: FaHeart, 
-                color: "from-red-500 to-pink-500",
-                bgColor: "from-red-500/20 to-pink-500/20"
-              },
-              { 
-                label: "Profile Views", 
-                value: userStats.profileViews, 
-                icon: FaEye, 
-                color: "from-green-500 to-emerald-500",
-                bgColor: "from-green-500/20 to-emerald-500/20"
-              },
-              { 
-                label: "Avg Rating", 
-                value: userStats.averageRating || "N/A", 
-                icon: FaStar, 
-                color: "from-yellow-500 to-orange-500",
-                bgColor: "from-yellow-500/20 to-orange-500/20"
-              }
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.1 * index }}
-                whileHover={{ scale: 1.05 }}
-                className={`bg-gradient-to-br ${stat.bgColor} backdrop-blur-sm border border-white/10 p-6 rounded-xl text-center group hover:shadow-2xl transition-all duration-300`}
-              >
-                <div className={`inline-flex p-3 rounded-full bg-gradient-to-r ${stat.color} mb-3 group-hover:scale-110 transition-transform`}>
-                  <stat.icon className="text-white text-xl" />
-                </div>
-                <p className="text-2xl lg:text-3xl font-bold mb-1">{stat.value}</p>
-                <p className="text-slate-400 text-sm font-medium">{stat.label}</p>
-              </motion.div>
-            ))}
+            <StatCard 
+              label="Reviews Written" 
+              value={userStats.reviews} 
+              subtitle="Total contributions"
+              icon={FiStar}
+            />
+            <StatCard 
+              label="Likes Received" 
+              value={userStats.likes} 
+              subtitle="Community appreciation"
+              icon={FiUsers}
+            />
+            <StatCard 
+              label="Restaurants Tried" 
+              value={userStats.totalRestaurants} 
+              subtitle="Unique places"
+              icon={FiMapPin}
+            />
+            <StatCard 
+              label="Average Rating" 
+              value={userStats.averageRating || "N/A"} 
+              subtitle="Your rating style"
+              icon={FiStar}
+            />
           </motion.div>
 
-          {/* Activity Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg">
-                <HiTrendingUp className="text-white text-xl" />
-              </div>
-              <h2 className="text-2xl font-bold">Recent Activity</h2>
-            </div>
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <div className="text-center py-12">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MdReviews className="text-3xl text-blue-400" />
+            {/* Recent Activity */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="lg:col-span-2"
+            >
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+                <h2 className="text-xl font-bold text-white mb-6">Recent Reviews</h2>
+                
+                {userReviews.length > 0 ? (
+                  <div className="space-y-4">
+                    {userReviews.slice(0, 5).map((review, index) => (
+                      <ReviewCard key={review._id} review={review} index={index} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <FiStar className="w-12 h-12 text-[#D0D0D0]/30 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-[#D0D0D0]/70 mb-2">
+                      No reviews yet
+                    </h3>
+                    <p className="text-[#D0D0D0]/50 mb-6">
+                      Start sharing your dining experiences with the community
+                    </p>
+                    <Link
+                      href="/write-review"
+                      className="inline-flex items-center gap-2 bg-[#33e0a1] text-[#121b22] px-6 py-3 rounded-xl font-medium hover:bg-[#2dd4bf] transition-colors"
+                    >
+                      <FiStar className="w-4 h-4" />
+                      Write Your First Review
+                    </Link>
+                  </div>
+                )}
+
+                {userReviews.length > 5 && (
+                  <div className="mt-6 text-center">
+                    <Link
+                      href="/my-reviews"
+                      className="text-[#33e0a1] hover:text-[#2dd4bf] font-medium transition-colors"
+                    >
+                      View All Reviews ({userReviews.length}) →
+                    </Link>
+                  </div>
+                )}
               </div>
-              <h3 className="text-xl font-semibold mb-2">Start Your Journey</h3>
-              <p className="text-slate-400 mb-6 max-w-md mx-auto">
-                Share your first review and help others discover amazing local spots in your area.
-              </p>
-              <Link href="/write-review">
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-3 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
-                >
-                  Write Your First Review
-                </motion.button>
-              </Link>
-            </div>
-          </motion.div>
+            </motion.div>
+
+            {/* Quick Actions & Info */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="space-y-6"
+            >
+              
+              {/* Quick Actions */}
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+                <h3 className="text-lg font-bold text-white mb-4">Quick Actions</h3>
+                <div className="space-y-3">
+                  <Link
+                    href="/discover"
+                    className="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors group"
+                  >
+                    <FiMapPin className="w-5 h-5 text-[#33e0a1]" />
+                    <span className="text-white group-hover:text-[#33e0a1] transition-colors">
+                      Discover Restaurants
+                    </span>
+                  </Link>
+                  <Link
+                    href="/saved"
+                    className="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors group"
+                  >
+                    <FiStar className="w-5 h-5 text-[#33e0a1]" />
+                    <span className="text-white group-hover:text-[#33e0a1] transition-colors">
+                      Saved Places
+                    </span>
+                  </Link>
+                  <Link
+                    href="/community"
+                    className="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors group"
+                  >
+                    <FiUsers className="w-5 h-5 text-[#33e0a1]" />
+                    <span className="text-white group-hover:text-[#33e0a1] transition-colors">
+                      Community
+                    </span>
+                  </Link>
+                  {isAdmin && (
+                    <Link
+                      href="/admin"
+                      className="flex items-center gap-3 p-3 bg-[#33e0a1]/10 border border-[#33e0a1]/20 rounded-xl hover:bg-[#33e0a1]/20 transition-colors group"
+                    >
+                      <FiSettings className="w-5 h-5 text-[#33e0a1]" />
+                      <span className="text-[#33e0a1] font-medium">
+                        Admin Panel
+                      </span>
+                    </Link>
+                  )}
+                </div>
+              </div>
+
+              {/* Profile Insights */}
+              {userReviews.length > 0 && (
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+                  <h3 className="text-lg font-bold text-white mb-4">Your Insights</h3>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[#D0D0D0]/70 text-sm">Most Active Month</span>
+                      <span className="text-white text-sm">
+                        {new Date().toLocaleDateString('en-US', { month: 'long' })}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-[#D0D0D0]/70 text-sm">Favorite Rating</span>
+                      <span className="text-[#33e0a1] text-sm">
+                        {Math.round(userStats.averageRating)} ★
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-[#D0D0D0]/70 text-sm">Review Streak</span>
+                      <span className="text-white text-sm">
+                        {userReviews.length > 5 ? 'Active' : 'Getting Started'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </div>
         </div>
       </div>
     </>

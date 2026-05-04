@@ -1,282 +1,427 @@
 "use client";
-
-import React, { useState, useEffect, useRef } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
-import { FaStar, FaHeart } from "react-icons/fa";
-import { MdOutlineRestaurantMenu } from "react-icons/md";
-import { IoMdPricetag } from "react-icons/io";
-import withAuth from "@/lib/withAuth";
-import { FaCamera, FaUtensils, FaShoppingCart, FaClinicMedical } from "react-icons/fa";
-import { FaStreetView } from "react-icons/fa6"
-import { MdElectricBolt } from "react-icons/md"
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { FiMapPin, FiStar, FiFilter, FiGrid, FiList, FiMap, FiNavigation, FiRefreshCw } from "react-icons/fi";
 import Navbar from "@/components/Navbar";
+import AdvancedSearch from "@/components/Search/AdvancedSearch";
+import RestaurantCard from "@/components/RestaurantCard";
+import Loader from "@/components/ui/Loader";
+import { chandigarhRestaurants, updateRestaurantDistances } from "@/data/chandigarhRestaurants";
+import { useGeolocation } from "@/hooks/useGeolocation";
 
-const sections = [
-    { name: "All", icon: "🏠", heading: "Where to?", placeholder: "Places to go, things to do, hotels...", category: "" },
-    { name: "Street Food", icon: <FaStreetView />, heading: "Find Hotels", placeholder: "Search for hotels...", category: "Street Food" },
-    { name: "Places to Visit", icon: <FaCamera />, heading: "Discover Activities", placeholder: "Find attractions, tours...", category: "Places to Visit" },
-    { name: "Restaurants", icon: <FaUtensils />, heading: "Explore Restaurants", placeholder: "Search for restaurants...", category: "Restaurant" },
-    { name: "Shopping", icon: <FaShoppingCart />, heading: "Find the best clothes", placeholder: "Search for flights...", category: "Shopping" },
-    { name: "Electronics", icon: <MdElectricBolt />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes...", category: "Electronics" },
-    { name: "Medical", icon: <FaClinicMedical />, heading: "Find Holiday Homes", placeholder: "Search for holiday homes...", category: "Medical" },
-];
+const DiscoverPage = () => {
+  const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid', 'list', 'map'
+  const [sortBy, setSortBy] = useState('distance');
+  const [filters, setFilters] = useState({
+    cuisine: [],
+    priceRange: [1, 4],
+    rating: 0,
+    distance: 25,
+    openNow: false,
+    features: []
+  });
+  const [searchQuery, setSearchQuery] = useState('');
+  const [totalResults, setTotalResults] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-const Page = () => {
-    const [restaurants, setRestaurants] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [user, setUser] = useState();
-    const [loading, setLoading] = useState(true);
-    const [activeSection, setActiveSection] = useState(sections[0]);
-    const [savedReviews, setSavedReviews] = useState({});
-    const scrollRef = useRef(null);
+  // Geolocation hook
+  const { location: userLocation, error: locationError, loading: locationLoading, refreshLocation } = useGeolocation();
 
-    const scroll = (direction) => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollBy({
-                left: direction === "left" ? -150 : 150,
-                behavior: "smooth",
-            });
-        }
-    };
+  useEffect(() => {
+    fetchRestaurants();
+  }, [filters, sortBy, currentPage, userLocation]);
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
+  const fetchRestaurants = async (isNewSearch = false) => {
+    try {
+      if (isNewSearch) {
+        setLoading(true);
+        setCurrentPage(1);
+      }
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const token = localStorage.getItem("authToken");
-                if (!token) {
-                    router.push("/login");
-                    return;
-                }
+      // Use hardcoded Chandigarh restaurants
+      let filteredRestaurants = [...chandigarhRestaurants];
 
-                const response = await fetch("/api/users/profile", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+      // Update distances based on user location
+      if (userLocation) {
+        filteredRestaurants = updateRestaurantDistances(filteredRestaurants, userLocation);
+      }
 
-                if (!response.ok) {
-                    throw new Error("Invalid or expired token");
-                }
+      // Apply filters
+      if (searchQuery) {
+        filteredRestaurants = filteredRestaurants.filter(restaurant =>
+          restaurant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          restaurant.cuisine.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          restaurant.specialties.some(specialty => 
+            specialty.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        );
+      }
 
-                const data = await response.json();
-                setUser(data);
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+      if (filters.cuisine.length > 0) {
+        filteredRestaurants = filteredRestaurants.filter(restaurant =>
+          filters.cuisine.includes(restaurant.cuisine)
+        );
+      }
 
-        fetchUserData();
-    }, []);
+      if (filters.rating > 0) {
+        filteredRestaurants = filteredRestaurants.filter(restaurant =>
+          restaurant.rating >= filters.rating
+        );
+      }
 
-    useEffect(() => {
-        async function fetchRestaurants() {
-            try {
-                const response = await fetch("/api/restaurant");
-                const data = await response.json();
-                if (data.success) {
-                    setRestaurants(data.data);
-                }
-            } catch (error) {
-                console.error("Error fetching restaurants:", error);
-            }
-        }
-        fetchRestaurants();
-    }, []);
+      if (filters.priceRange[0] > 1 || filters.priceRange[1] < 4) {
+        filteredRestaurants = filteredRestaurants.filter(restaurant =>
+          restaurant.priceRange >= filters.priceRange[0] && 
+          restaurant.priceRange <= filters.priceRange[1]
+        );
+      }
 
-    const filteredRestaurants = restaurants.filter((restaurant) => {
-        const matchesSearch = searchQuery
-            ? restaurant.description?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
-              restaurant.name?.toLowerCase()?.includes(searchQuery.toLowerCase())
-            : true;
-        
-        const matchesCategory = activeSection.name !== "All"
-            ? restaurant.description === activeSection.category
-            : true;
-        
-        return matchesSearch && matchesCategory;
-    });
+      if (filters.openNow) {
+        filteredRestaurants = filteredRestaurants.filter(restaurant =>
+          restaurant.openNow
+        );
+      }
 
-    const savedReview = async (reviewId) => {
-        const profileId = user?.data?._id;
-        if (!profileId || savedReviews[reviewId]) return;
-    
-        try {
-            const response = await fetch("/api/review/save-review", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ profileId, reviewId }),
-            });
-    
-            const data = await response.json();
-            if (data.success) {
-                setSavedReviews((prev) => ({ ...prev, [reviewId]: true }));
-            }
-        } catch (error) {
-            console.error("Error saving review:", error);
-        }
-    };
+      if (filters.features.length > 0) {
+        filteredRestaurants = filteredRestaurants.filter(restaurant =>
+          filters.features.some(feature => restaurant.features.includes(feature))
+        );
+      }
 
-    return (
-        <>
-            <div className="w-full flex justify-center items-center">
-                <div className="w-full md:w-[65%]">
-                    <Navbar />
-                </div>
+      // Apply sorting
+      switch (sortBy) {
+        case 'rating':
+          filteredRestaurants.sort((a, b) => b.rating - a.rating);
+          break;
+        case 'distance':
+          if (userLocation) {
+            filteredRestaurants.sort((a, b) => (a.actualDistance || 0) - (b.actualDistance || 0));
+          }
+          break;
+        case 'price_low':
+          filteredRestaurants.sort((a, b) => a.priceRange - b.priceRange);
+          break;
+        case 'price_high':
+          filteredRestaurants.sort((a, b) => b.priceRange - a.priceRange);
+          break;
+        case 'popular':
+          filteredRestaurants.sort((a, b) => b.reviewCount - a.reviewCount);
+          break;
+        default:
+          break;
+      }
+
+      // Pagination simulation
+      const itemsPerPage = 12;
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const paginatedResults = filteredRestaurants.slice(0, endIndex);
+
+      if (isNewSearch || currentPage === 1) {
+        setRestaurants(paginatedResults);
+      } else {
+        setRestaurants(prev => [...prev, ...filteredRestaurants.slice(startIndex, endIndex)]);
+      }
+      
+      setTotalResults(filteredRestaurants.length);
+      setHasMore(endIndex < filteredRestaurants.length);
+      
+    } catch (error) {
+      console.error('Error fetching restaurants:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = (query, newFilters) => {
+    setSearchQuery(query);
+    setFilters(newFilters);
+    fetchRestaurants(true);
+  };
+
+  const handleFiltersChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+
+  const handleSortChange = (newSort) => {
+    setSortBy(newSort);
+    setCurrentPage(1);
+  };
+
+  const loadMore = () => {
+    if (hasMore && !loading) {
+      setCurrentPage(prev => prev + 1);
+    }
+  };
+
+  const ViewToggle = () => (
+    <div className="flex items-center gap-2 bg-white/10 rounded-xl p-1">
+      {[
+        { mode: 'grid', icon: FiGrid, label: 'Grid' },
+        { mode: 'list', icon: FiList, label: 'List' },
+        { mode: 'map', icon: FiMap, label: 'Map' }
+      ].map(({ mode, icon: Icon, label }) => (
+        <button
+          key={mode}
+          onClick={() => setViewMode(mode)}
+          className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+            viewMode === mode
+              ? 'bg-[#33e0a1] text-[#121b22]'
+              : 'text-[#D0D0D0] hover:bg-white/10'
+          }`}
+        >
+          <Icon className="w-4 h-4" />
+          <span className="hidden sm:inline">{label}</span>
+        </button>
+      ))}
+    </div>
+  );
+
+  const SortDropdown = () => (
+    <select
+      value={sortBy}
+      onChange={(e) => handleSortChange(e.target.value)}
+      className="bg-white/10 border border-white/20 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-[#33e0a1]"
+    >
+      <option value="distance" className="bg-[#121b22]">Nearest First</option>
+      <option value="rating" className="bg-[#121b22]">Highest Rated</option>
+      <option value="price_low" className="bg-[#121b22]">Price: Low to High</option>
+      <option value="price_high" className="bg-[#121b22]">Price: High to Low</option>
+      <option value="popular" className="bg-[#121b22]">Most Popular</option>
+    </select>
+  );
+
+  const LocationStatus = () => (
+    <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 mb-6">
+      <FiNavigation className={`w-5 h-5 ${userLocation ? 'text-[#33e0a1]' : 'text-red-400'}`} />
+      <div className="flex-1">
+        {locationLoading ? (
+          <span className="text-[#D0D0D0]/70">Getting your location...</span>
+        ) : userLocation ? (
+          <span className="text-[#33e0a1]">
+            Location detected • Showing restaurants near you in Chandigarh
+          </span>
+        ) : (
+          <span className="text-red-400">
+            {locationError || 'Location access denied • Showing all restaurants'}
+          </span>
+        )}
+      </div>
+      <button
+        onClick={refreshLocation}
+        className="p-2 text-[#D0D0D0] hover:text-[#33e0a1] hover:bg-white/10 rounded-lg transition-all"
+        disabled={locationLoading}
+      >
+        <FiRefreshCw className={`w-4 h-4 ${locationLoading ? 'animate-spin' : ''}`} />
+      </button>
+    </div>
+  );
+
+  const RestaurantGrid = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {restaurants.map((restaurant, index) => (
+        <motion.div
+          key={restaurant._id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1 }}
+        >
+          <RestaurantCard
+            restaurant={restaurant}
+            onSave={(id, saved) => console.log('Save restaurant:', id, saved)}
+            onShare={(restaurant) => console.log('Share restaurant:', restaurant)}
+            onViewDetails={(restaurant) => console.log('View details:', restaurant)}
+          />
+        </motion.div>
+      ))}
+    </div>
+  );
+
+  const RestaurantList = () => (
+    <div className="space-y-4">
+      {restaurants.map((restaurant, index) => (
+        <motion.div
+          key={restaurant._id}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: index * 0.05 }}
+        >
+          <RestaurantCard
+            restaurant={restaurant}
+            variant="compact"
+            onSave={(id, saved) => console.log('Save restaurant:', id, saved)}
+            onShare={(restaurant) => console.log('Share restaurant:', restaurant)}
+            onViewDetails={(restaurant) => console.log('View details:', restaurant)}
+          />
+        </motion.div>
+      ))}
+    </div>
+  );
+
+  const MapView = () => (
+    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center">
+      <FiMap className="w-16 h-16 text-[#33e0a1] mx-auto mb-4" />
+      <h3 className="text-xl font-bold text-white mb-2">Interactive Map View</h3>
+      <p className="text-[#D0D0D0]/70 mb-4">
+        See all {totalResults} restaurants in Chandigarh on an interactive map
+      </p>
+      {userLocation && (
+        <div className="bg-white/5 rounded-xl p-4 mb-4">
+          <p className="text-[#33e0a1] text-sm">
+            📍 Your Location: {userLocation.lat.toFixed(4)}, {userLocation.lng.toFixed(4)}
+          </p>
+          <p className="text-[#D0D0D0]/50 text-xs mt-1">
+            Accuracy: ±{userLocation.accuracy}m
+          </p>
+        </div>
+      )}
+      <p className="text-[#D0D0D0]/50 text-sm">
+        Interactive map with restaurant locations will be available in the next update.
+      </p>
+    </div>
+  );
+
+  if (loading && restaurants.length === 0) {
+    return <Loader message="Discovering amazing restaurants in Chandigarh..." />;
+  }
+
+  return (
+    <>
+      <div className="w-full flex justify-center items-center bg-[#121b22]">
+        <div className="w-full md:w-[65%]">
+          <Navbar />
+        </div>
+      </div>
+
+      <div className="min-h-screen bg-[#121b22] text-white">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <h1 className="text-3xl font-bold text-white mb-2">
+              Discover Restaurants in Chandigarh
+            </h1>
+            <p className="text-[#D0D0D0]/70">
+              Find your next favorite dining spot from {totalResults.toLocaleString()} restaurants
+            </p>
+          </motion.div>
+
+          {/* Location Status */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+          >
+            <LocationStatus />
+          </motion.div>
+
+          {/* Search and Filters */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="mb-8"
+          >
+            <AdvancedSearch
+              onSearch={handleSearch}
+              onFiltersChange={handleFiltersChange}
+            />
+          </motion.div>
+
+          {/* Controls */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8"
+          >
+            <div className="flex items-center gap-4">
+              <span className="text-[#D0D0D0]/70 text-sm">
+                {totalResults.toLocaleString()} restaurants found
+              </span>
+              {searchQuery && (
+                <span className="text-[#33e0a1] text-sm">
+                  for "{searchQuery}"
+                </span>
+              )}
+              {userLocation && (
+                <span className="text-[#33e0a1] text-sm">
+                  📍 Near you
+                </span>
+              )}
             </div>
-            <div className="md:mt-8 px-4 sm:px-6 md:px-1">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d54872.0604246069!2d76.7295140993382!3d30.732347721742805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fed0be66ec96b%3A0xa5ff67f9527319fe!2sChandigarh!5e0!3m2!1sen!2sin!4v1741619504180!5m2!1sen!2sin"
-                    className="w-full h-[300px] sm:h-[400px] md:h-[500px]"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
-
-                <div>
-                    <div className="flex flex-col sm:flex-row gap-4 text-[#FFD9C4] mt-8 w-full items-center justify-center">
-                        <div className="relative w-full sm:w-auto">
-                            <button
-                                onClick={toggleDropdown}
-                                className="border border-white rounded-full px-6 py-3 flex items-center justify-center w-full sm:w-auto"
-                            >
-                                Chandigarh <ChevronDown className="ml-1" size={16} />
-                            </button>
-                            {isDropdownOpen && (
-                                <ul className="absolute left-0 mt-2 w-full sm:w-auto border rounded-md shadow-lg bg-white text-black cursor-pointer duration-200 z-10">
-                                    <li className="px-4 py-2 hover:bg-gray-100">More Places Coming Soon!</li>
-                                </ul>
-                            )}
-                        </div>
-
-                        <div className="flex items-center w-full md:w-[50%] border border-white pl-4 rounded-full shadow-md py-3">
-                            <input
-                                type="text"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Search your vibe..."
-                                className="w-full outline-none text-[#D0D0D0] text-sm placeholder:text-[#D0D0D0] bg-transparent"
-                            />
-                        </div>
-                    </div>
-                    
-                    <div className="relative w-full">
-                        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#121b22] to-transparent pointer-events-none z-10 md:hidden" />
-                        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#121b22] to-transparent pointer-events-none z-10 md:hidden" />
-
-                        <button
-                            onClick={() => scroll("left")}
-                            className="absolute left-2 top-1/2 -translate-y-1/2 p-1 bg-white/40 rounded-full shadow-sm z-20 md:hidden"
-                        >
-                            <ChevronLeft size={16} className="text-gray-700" />
-                        </button>
-
-                        <div
-                            ref={scrollRef}
-                            className="flex mt-4 flex-nowrap overflow-x-auto justify-start md:justify-center items-center gap-4 w-full max-w-full scrollbar-hide px-10 md:px-0"
-                        >
-                            {sections.map((section) => (
-                                <button
-                                    key={section.name}
-                                    onClick={() => setActiveSection(section)}
-                                    className={`flex items-center cursor-pointer duration-200 space-x-2 text-sm sm:text-lg font-semibold lg:px-4 px-2 py-2 whitespace-nowrap ${
-                                        activeSection.name === section.name
-                                            ? "text-[#FFD9C4] border-b-2 border-[#FFD9C4]"
-                                            : "text-[#D0D0D0]"
-                                    }`}
-                                >
-                                    <span>{section.icon}</span>
-                                    <span>{section.name}</span>
-                                </button>
-                            ))}
-                        </div>
-
-                        <button
-                            onClick={() => scroll("right")}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 bg-white/40 rounded-full shadow-sm z-20 md:hidden"
-                        >
-                            <ChevronRight size={16} className="text-gray-700" />
-                        </button>
-                    </div>
-                </div>
-
-                <div className="mt-12">
-                    <div className="flex flex-col gap-6 mb-12 items-center">
-                        {filteredRestaurants.length > 0 ? (
-                            filteredRestaurants.map((restaurant) => (
-                                <div
-                                    key={restaurant._id}
-                                    className="w-full sm:w-4/5 lg:w-3/5 bg-white rounded-lg shadow-md p-4 flex flex-col md:flex-row gap-6"
-                                >
-                                    <div className="w-full md:w-[40%] h-[250px] sm:h-[300px] overflow-hidden rounded-lg">
-                                        <img
-                                            src={restaurant.imageUrl || "https://via.placeholder.com/150"}
-                                            alt="Restaurant Image"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-
-                                    <div className="w-full md:w-[60%] flex flex-col gap-3">
-                                        <div className="flex w-full justify-between items-start">
-                                            <h2 className="text-2xl sm:text-3xl font-bold">{restaurant.name}</h2>
-                                            <button 
-                                                onClick={() => savedReview(restaurant?._id)} 
-                                                className={`cursor-pointer ${savedReviews[restaurant._id] ? "text-red-500" : "text-gray-400 hover:text-red-500"}`}
-                                            >
-                                                <FaHeart size={24} />
-                                            </button>
-                                        </div>
-                                        <p className="text-blue-500 text-sm sm:text-md">{restaurant.location}</p>
-                                        <div className="flex items-center gap-1 text-green-600">
-                                            {[...Array(4)].map((_, i) => (
-                                                <FaStar key={i} />
-                                            ))}
-                                            <span className="text-gray-700 ml-2">{restaurant.reviews}</span>
-                                        </div>
-                                        <p className="text-gray-700 text-sm sm:text-md">
-                                            {restaurant.description}...
-                                            <span className="text-blue-500 cursor-pointer">Read more</span>
-                                        </p>
-                                        <div className="flex flex-wrap gap-2 text-xs sm:text-sm mt-2">
-                                            <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full">
-                                                <MdOutlineRestaurantMenu size={16} />
-                                                {restaurant.category}
-                                            </span>
-                                            <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full">
-                                                <IoMdPricetag size={16} /> ₹{restaurant.priceRange}
-                                            </span>
-                                        </div>
-
-                                        <div className="mt-4">
-                                            <h3 className="text-lg sm:text-xl font-semibold">Opening Hours</h3>
-                                            <p className="text-gray-700">{restaurant.openingHours}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <p className="text-center text-gray-500">
-                                {searchQuery 
-                                    ? "No results found for your search." 
-                                    : activeSection.name === "All" 
-                                        ? "Loading..." 
-                                        : `!Please use search option, this option isn't working properly.`}
-                            </p>
-                        )}
-                    </div>
-                </div>
+            
+            <div className="flex items-center gap-4">
+              <SortDropdown />
+              <ViewToggle />
             </div>
-        </>
-    );
+          </motion.div>
+
+          {/* Results */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            {restaurants.length > 0 ? (
+              <>
+                {viewMode === 'grid' && <RestaurantGrid />}
+                {viewMode === 'list' && <RestaurantList />}
+                {viewMode === 'map' && <MapView />}
+
+                {/* Load More Button */}
+                {hasMore && viewMode !== 'map' && (
+                  <div className="text-center mt-12">
+                    <button
+                      onClick={loadMore}
+                      disabled={loading}
+                      className="bg-[#33e0a1] text-[#121b22] px-8 py-3 rounded-xl font-medium hover:bg-[#2dd4bf] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loading ? 'Loading...' : 'Load More Restaurants'}
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-16">
+                <FiMapPin className="w-16 h-16 text-[#D0D0D0]/30 mx-auto mb-6" />
+                <h3 className="text-2xl font-bold text-[#D0D0D0]/70 mb-4">
+                  No restaurants found
+                </h3>
+                <p className="text-[#D0D0D0]/50 mb-8 max-w-md mx-auto">
+                  Try adjusting your search criteria or filters to find more restaurants in Chandigarh.
+                </p>
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setFilters({
+                      cuisine: [],
+                      priceRange: [1, 4],
+                      rating: 0,
+                      distance: 25,
+                      openNow: false,
+                      features: []
+                    });
+                    fetchRestaurants(true);
+                  }}
+                  className="bg-[#33e0a1] text-[#121b22] px-6 py-3 rounded-xl font-medium hover:bg-[#2dd4bf] transition-colors"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            )}
+          </motion.div>
+        </div>
+      </div>
+    </>
+  );
 };
 
-export default withAuth(Page);
+export default DiscoverPage;
